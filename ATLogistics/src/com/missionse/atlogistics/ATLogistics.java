@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.Menu;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.missionse.atlogistics.maps.DualMapContainer;
 import com.missionse.atlogistics.maps.LeftMapsFragment;
 import com.missionse.atlogistics.maps.RightMapsFragment;
 
@@ -18,6 +19,7 @@ public class ATLogistics extends Activity {
 
 	private RightMapsFragment rightMapsFragment;
 	private LeftMapsFragment leftMapsFragment;
+	private DualMapContainer mapContainer;
 
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
@@ -27,8 +29,11 @@ public class ATLogistics extends Activity {
 		createNavigationMenu();
 		createFilterMenu();
 
+		mapContainer = new DualMapContainer();
 		rightMapsFragment = new RightMapsFragment();
+		rightMapsFragment.setMapContainer(mapContainer);
 		leftMapsFragment = new LeftMapsFragment();
+		leftMapsFragment.setMapContainer(mapContainer);
 
 		showRightMap();
 		showLeftMap();

@@ -17,6 +17,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
@@ -29,17 +30,26 @@ public class RightMapsFragment extends Fragment implements ConnectionCallbacks, 
 LocationListener, OnMyLocationButtonClickListener, OnMapClickListener, OnMapLongClickListener {
 
 	private static final LatLng HOME = new LatLng(32.865240, -80.020439);
+	private static final float HOME_BEARING = 27f;
 
-	private GoogleMap mMap;
+	private GoogleMap map;
 	private LocationClient mLocationClient;
-
-	private boolean mFirstLocationChange = true;
 
 	private View view;
 
 	private static final LocationRequest REQUEST = LocationRequest.create().setInterval(5000)
 			.setFastestInterval(16) // 16ms = 60fps
 			.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+	private DualMapContainer mapContainer;
+	public void setMapContainer(final DualMapContainer container) {
+		mapContainer = container;
+		mapContainer.setRightMap(this);
+	}
+
+	public GoogleMap getMap() {
+		return map;
+	}
 
 	@Override
 	public void onCreate(final Bundle savedInstanceState) {
@@ -71,10 +81,6 @@ LocationListener, OnMyLocationButtonClickListener, OnMapClickListener, OnMapLong
 
 	@Override
 	public void onLocationChanged(final Location location) {
-		if (mFirstLocationChange) {
-			mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(HOME, 17.5f, 0, 27)));
-			mFirstLocationChange = false;
-		}
 	}
 
 	@Override
@@ -107,9 +113,9 @@ LocationListener, OnMyLocationButtonClickListener, OnMapClickListener, OnMapLong
 	}
 
 	private void setUpMapIfNeeded() {
-		if (mMap == null) {
-			mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map_right)).getMap();
-			if (mMap != null) {
+		if (map == null) {
+			map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map_right)).getMap();
+			if (map != null) {
 				setUpMap();
 			}
 		}
@@ -122,12 +128,30 @@ LocationListener, OnMyLocationButtonClickListener, OnMapClickListener, OnMapLong
 	}
 
 	private void setUpMap() {
-		mMap.setMyLocationEnabled(true);
-		mMap.setOnMyLocationButtonClickListener(this);
-		mMap.setOnMapClickListener(this);
-		mMap.setOnMapLongClickListener(this);
-		mMap.setBuildingsEnabled(true);
-		mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+		map.setMyLocationEnabled(true);
+		map.setOnMyLocationButtonClickListener(this);
+		map.setOnMapClickListener(this);
+		map.setOnMapLongClickListener(this);
+		map.setBuildingsEnabled(true);
+		map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+		map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+			@Override
+			public void onMapLoaded() {
+				map.animateCamera(CameraUpdateFactory
+						.newCameraPosition(new CameraPosition(HOME, 17.5f, 0, HOME_BEARING)));
+			}
+		});
+		map.setOnCameraChangeListener(new OnCameraChangeListener() {
+			@Override
+			public void onCameraChange(final CameraPosition posRight) {
+				if (mapContainer.getLeftMap() != null) {
+						mapContainer.getLeftMap().animateCamera(CameraUpdateFactory.zoomTo(posRight.zoom - 3));
+				}
+				if (mapContainer.getLeft() != null) {
+					mapContainer.getLeft().drawZoomedViewPolygon();
+				}
+			}
+		});
 	}
 
 	@Override
