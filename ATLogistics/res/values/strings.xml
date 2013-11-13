@@ -7,5 +7,8 @@
     <!-- Menu strings -->
     <string name="navigation_menu_header">Main Menu</string>
     <string name="filter_menu_header">Filters</string>
+    <string name="filter_menu_showall">Show All</string>
+    <string name="filter_menu_hideall">Hide All</string>
+    <string name="filter_icon_content_description">Icon for filter menu entry</string>
 
 </resources>

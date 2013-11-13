@@ -29,8 +29,8 @@ public class NavigationMenuFragment extends ListFragment {
 		menuItems.add("MAP");
 		menuItems.add("RESOURCE FINDER");
 
-		setListAdapter(new ArrayAdapter<String>(getActivity(), R.layout.navigation_menu_entry,
-				R.id.navigation_menu_text, menuItems));
+		setListAdapter(new ArrayAdapter<String>(getActivity(), R.layout.navigation_menu_entry, R.id.navigation_menu_text,
+				menuItems));
 	}
 
 	@Override
