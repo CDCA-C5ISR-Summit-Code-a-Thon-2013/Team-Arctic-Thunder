@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
@@ -71,6 +74,16 @@ public class ATLogistics extends Activity {
 		rightMenuFragment = new FilterMenuFragment();
 		transaction.replace(R.id.filter_menu, rightMenuFragment);
 		transaction.commit();
+	}
+
+	@Override
+	public void onNewIntent(final Intent intent) {
+		setIntent(intent);
+		String action = intent.getAction();
+		if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action) || NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)
+				|| NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
+			Log.e("something", "got nfc");
+		}
 	}
 
 	@Override
