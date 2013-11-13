@@ -1,92 +1,60 @@
 package com.missionse.atlogistics.resources;
 
 public class Resource {
-	
-	
+
 	private ResourceType type;
-	private String resourceName;
-	private double lat;
-	private double lon;
-	private int count;
-	private int fillCount;
-	
-	
-	public Resource(String name, ResourceType t){
+	private String resourceName = "";
+	private String flavorText = "";
+	private double lat = 0;
+	private double lon = 0;
+
+	public Resource(final String name, final ResourceType t) {
 		resourceName = name;
 		type = t;
-		
-		lat = 0;
-		lon = 0;
-		count = 0;
-		fillCount = 0;
-	}
-	
-	public Resource(ResourceType t){
-		resourceName = t.getDescription();
-		type = t;
-		
-		lat = 0;
-		lon = 0;
-		count = 0;
-		fillCount = 0;
 	}
 
+	public Resource(final ResourceType t) {
+		resourceName = t.getDescription();
+		type = t;
+	}
 
 	public ResourceType getType() {
 		return type;
 	}
 
-
-	public void setType(ResourceType type) {
+	public void setType(final ResourceType type) {
 		this.type = type;
 	}
-
 
 	public String getResourceName() {
 		return resourceName;
 	}
 
-
-	public void setResourceName(String resourceName) {
-		this.resourceName = resourceName;
+	public void setResourceName(final String name) {
+		resourceName = name;
 	}
 
+	public String getFlavorText() {
+		return flavorText;
+	}
+
+	public void setFlavorText(final String text) {
+		flavorText = text;
+	}
 
 	public double getLat() {
 		return lat;
 	}
 
-
-	public void setLat(double lat) {
+	public void setLat(final double lat) {
 		this.lat = lat;
 	}
-
 
 	public double getLon() {
 		return lon;
 	}
 
-
-	public void setLon(double lon) {
+	public void setLon(final double lon) {
 		this.lon = lon;
 	}
-
-
-	public int getCount() {
-		return count;
-	}
-
-
-	public void setCount(int count) {
-		this.count = count;
-	}
-	
-	public int getFillCount(){
-		return this.fillCount;
-	}
-	
-	public void setFillCount(int c){
-		this.fillCount = c;
-	}
-
 }

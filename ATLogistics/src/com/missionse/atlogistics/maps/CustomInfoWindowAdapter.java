@@ -22,9 +22,9 @@ public class CustomInfoWindowAdapter implements InfoWindowAdapter {
 	// "title" and "snippet".
 	private final View mWindow;
 	private final View mContents;
-	private final HashMap<Resource, Marker> resourceMarkers;
+	private final HashMap<Resource, ResourceMarker> resourceMarkers;
 
-	CustomInfoWindowAdapter(final Activity activity, final HashMap<Resource, Marker> markers) {
+	CustomInfoWindowAdapter(final Activity activity, final HashMap<Resource, ResourceMarker> markers) {
 		mWindow = activity.getLayoutInflater().inflate(R.layout.custom_info_window, null);
 		mContents = activity.getLayoutInflater().inflate(R.layout.custom_info_contents, null);
 		resourceMarkers = markers;

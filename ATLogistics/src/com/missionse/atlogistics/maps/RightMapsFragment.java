@@ -26,14 +26,16 @@ import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.missionse.atlogistics.R;
 import com.missionse.atlogistics.resources.Resource;
+import com.missionse.atlogistics.resources.ResourceChangeListener;
+import com.missionse.atlogistics.resources.ResourceManager;
 
 public class RightMapsFragment extends Fragment implements ConnectionCallbacks, OnConnectionFailedListener,
-LocationListener, OnMyLocationButtonClickListener, OnMapClickListener, OnMapLongClickListener {
+		LocationListener, OnMyLocationButtonClickListener, OnMapClickListener, OnMapLongClickListener,
+		ResourceChangeListener {
 
-	private static final LatLng HOME = new LatLng(32.865240, -80.020439);
+	private static final LatLng HOME = new LatLng(11.05, 124.367);
 	private static final float HOME_BEARING = 27f;
 
 	private GoogleMap map;
@@ -41,18 +43,16 @@ LocationListener, OnMyLocationButtonClickListener, OnMapClickListener, OnMapLong
 
 	private View view;
 
-	private HashMap<Resource, Marker> markers;
+	private HashMap<Resource, ResourceMarker> markers;
 	private HashMap<Resource, Boolean> markerVisibilities;
 
-	private static final LocationRequest REQUEST = LocationRequest.create().setInterval(5000)
-			.setFastestInterval(16) // 16ms = 60fps
+	private static final LocationRequest REQUEST = LocationRequest.create().setInterval(5000).setFastestInterval(16) // 16ms = 60fps
 			.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
 	private DualMapContainer mapContainer;
 
-
 	public RightMapsFragment() {
-		markers = new HashMap<Resource, Marker>();
+		markers = new HashMap<Resource, ResourceMarker>();
 		markerVisibilities = new HashMap<Resource, Boolean>();
 	}
 
@@ -60,8 +60,6 @@ LocationListener, OnMyLocationButtonClickListener, OnMapClickListener, OnMapLong
 		mapContainer = container;
 		mapContainer.setRightMap(this);
 	}
-
-
 
 	public GoogleMap getMap() {
 		return map;
@@ -161,13 +159,16 @@ LocationListener, OnMyLocationButtonClickListener, OnMapClickListener, OnMapLong
 			@Override
 			public void onCameraChange(final CameraPosition posRight) {
 				if (mapContainer.getLeftMap() != null) {
-						mapContainer.getLeftMap().animateCamera(CameraUpdateFactory.zoomTo(posRight.zoom - 3));
+					mapContainer.getLeftMap().animateCamera(CameraUpdateFactory.zoomTo(posRight.zoom - 3));
 				}
 				if (mapContainer.getLeft() != null) {
 					mapContainer.getLeft().drawZoomedViewPolygon();
 				}
 			}
 		});
+		map.setInfoWindowAdapter(new CustomInfoWindowAdapter(getActivity(), markers));
+
+		ResourceManager.getInstance().addListener(this);
 	}
 
 	@Override
@@ -177,5 +178,14 @@ LocationListener, OnMyLocationButtonClickListener, OnMapClickListener, OnMapLong
 	@Override
 	public void onMapClick(final LatLng location) {
 		Log.e("RightMap", "onMapClick: " + location);
+	}
+
+	@Override
+	public void onResourcesChanged() {
+		markers.clear();
+		for (Resource resource : ResourceManager.getInstance().getResources()) {
+			ResourceMarker marker = new ResourceMarker(map, resource);
+			markers.put(resource, marker);
+		}
 	}
 }

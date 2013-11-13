@@ -1,44 +1,47 @@
 package com.missionse.atlogistics.resources;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-
-import android.content.res.Resources;
 
 public class ResourceManager {
 
 	private static ResourceManager instance;
 
 	private List<Resource> resources;
+	private List<ResourceChangeListener> listeners;
 
-	public static ResourceManager getInstance(){
-		if(instance == null){
+	public static ResourceManager getInstance() {
+		if (instance == null) {
 			instance = new ResourceManager();
 		}
 		return instance;
 	}
 
-	private ResourceManager(){
-		resources = new LinkedList<Resource>();
-		resources.add(new Resource(ResourceType.MEDICAL));
-		Random m = new Random();
-		for(int x = 0; x < 20; x++){
-			resources.add(new Resource(ResourceType.values()[m.nextInt(ResourceType.values().length)]));
-		}
-		
+	private ResourceManager() {
+		listeners = new ArrayList<ResourceChangeListener>();
+		resources = new ArrayList<Resource>();
 	}
 
-
-	public List<Resource> getResources(){
+	public List<Resource> getResources() {
 		return this.resources;
 	}
 
-	public void addResource(final Resource r){
+	public void addResource(final Resource r) {
 		resources.add(r);
 	}
 
-	public void removeResource(final Resource r){
+	public void removeResource(final Resource r) {
 		resources.remove(r);
+	}
+
+	public void addListener(final ResourceChangeListener listener) {
+		listeners.add(listener);
+		listener.onResourcesChanged();
+	}
+
+	public void notifyResourcesChanged() {
+		for (ResourceChangeListener listener : listeners) {
+			listener.onResourcesChanged();
+		}
 	}
 }

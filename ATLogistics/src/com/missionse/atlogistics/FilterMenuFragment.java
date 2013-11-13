@@ -25,7 +25,6 @@ import android.widget.ListView;
 import com.missionse.atlogistics.resources.ResourceType;
 
 public class FilterMenuFragment extends Fragment {
-	//private final List<String> menuItems = new ArrayList<String>();
 	private ListView listView;
 
 	private Button showAllButton;

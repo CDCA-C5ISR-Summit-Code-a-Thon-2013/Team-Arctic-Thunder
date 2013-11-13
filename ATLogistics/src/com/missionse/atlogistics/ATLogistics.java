@@ -1,5 +1,7 @@
 package com.missionse.atlogistics;
 
+import java.util.Random;
+
 import system.ArActivity;
 import android.app.Activity;
 import android.app.Fragment;
@@ -12,11 +14,14 @@ import android.util.Log;
 import android.view.Menu;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
-import com.missionse.atlogistics.maps.DualMapContainer;
 import com.missionse.atlogistics.augmented.setups.DefaultMultiSetup;
 import com.missionse.atlogistics.augmented.setups.ViewResourceSetup;
+import com.missionse.atlogistics.maps.DualMapContainer;
 import com.missionse.atlogistics.maps.LeftMapsFragment;
 import com.missionse.atlogistics.maps.RightMapsFragment;
+import com.missionse.atlogistics.resources.Resource;
+import com.missionse.atlogistics.resources.ResourceManager;
+import com.missionse.atlogistics.resources.ResourceType;
 
 public class ATLogistics extends Activity {
 
@@ -43,6 +48,8 @@ public class ATLogistics extends Activity {
 
 		showRightMap();
 		showLeftMap();
+
+		addDummyData();
 	}
 
 	private void createNavigationMenu() {
@@ -79,6 +86,17 @@ public class ATLogistics extends Activity {
 		transaction.commit();
 	}
 
+	private void addDummyData() {
+		Random random = new Random();
+		for (int count = 0; count < 20; ++count) {
+			Resource tempResource = new Resource(ResourceType.values()[random.nextInt(ResourceType.values().length)]);
+			tempResource.setLat(11.05 + random.nextDouble() * 0.1);
+			tempResource.setLon(124.367 + random.nextDouble() * 0.1);
+			ResourceManager.getInstance().addResource(tempResource);
+		}
+		ResourceManager.getInstance().notifyResourcesChanged();
+	}
+
 	@Override
 	public void onNewIntent(final Intent intent) {
 		setIntent(intent);
@@ -100,10 +118,9 @@ public class ATLogistics extends Activity {
 		navigationMenu.showContent();
 		DefaultMultiSetup s = new ViewResourceSetup(this);
 		startAR(s);
-		
 	}
-	
-	private void startAR(DefaultMultiSetup s){
+
+	private void startAR(final DefaultMultiSetup s) {
 		ArActivity.startWithSetup(this, s);
 	}
 

@@ -33,9 +33,9 @@ import com.google.android.gms.maps.model.VisibleRegion;
 import com.missionse.atlogistics.R;
 
 public class LeftMapsFragment extends Fragment implements ConnectionCallbacks, OnConnectionFailedListener,
-LocationListener, OnMyLocationButtonClickListener, OnMapClickListener, OnMapLongClickListener {
+		LocationListener, OnMyLocationButtonClickListener, OnMapClickListener, OnMapLongClickListener {
 
-	private static final LatLng HOME = new LatLng(32.865240, -80.020439);
+	private static final LatLng HOME = new LatLng(11.05, 124.367);
 	private static final float HOME_BEARING = 27f;
 
 	private GoogleMap map;
@@ -45,11 +45,11 @@ LocationListener, OnMyLocationButtonClickListener, OnMapClickListener, OnMapLong
 
 	private View view;
 
-	private static final LocationRequest REQUEST = LocationRequest.create().setInterval(5000)
-			.setFastestInterval(16) // 16ms = 60fps
+	private static final LocationRequest REQUEST = LocationRequest.create().setInterval(5000).setFastestInterval(16) // 16ms = 60fps
 			.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
 	private DualMapContainer mapContainer;
+
 	public void setMapContainer(final DualMapContainer container) {
 		mapContainer = container;
 		mapContainer.setLeftMap(this);
@@ -145,8 +145,7 @@ LocationListener, OnMyLocationButtonClickListener, OnMapClickListener, OnMapLong
 		map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
 			@Override
 			public void onMapLoaded() {
-				map.animateCamera(CameraUpdateFactory
-						.newCameraPosition(new CameraPosition(HOME, 15f, 0, HOME_BEARING)));
+				map.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(HOME, 15f, 0, HOME_BEARING)));
 			}
 		});
 
@@ -194,11 +193,8 @@ LocationListener, OnMyLocationButtonClickListener, OnMapClickListener, OnMapLong
 			rightVRpoints.add(rightVR.nearLeft);
 
 			if (zoomedViewPolygon == null) {
-				zoomedViewPolygon = map.addPolygon(new PolygonOptions()
-				.addAll(rightVRpoints)
-				.fillColor(fillColor)
-				.strokeWidth(strokeWidth)
-				.strokeColor(strokeColor));
+				zoomedViewPolygon = map.addPolygon(new PolygonOptions().addAll(rightVRpoints).fillColor(fillColor)
+						.strokeWidth(strokeWidth).strokeColor(strokeColor));
 			} else {
 				zoomedViewPolygon.setFillColor(fillColor);
 				zoomedViewPolygon.setStrokeWidth(strokeWidth);
