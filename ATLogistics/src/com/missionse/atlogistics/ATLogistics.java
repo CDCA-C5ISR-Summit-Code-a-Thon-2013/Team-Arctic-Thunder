@@ -1,7 +1,5 @@
 package com.missionse.atlogistics;
 
-import java.util.Random;
-
 import system.ArActivity;
 import android.app.Activity;
 import android.app.Fragment;
@@ -187,19 +185,17 @@ public class ATLogistics extends Activity implements ObjectLoadedListener {
 	}
 
 	private void addDummyData() {
-		Random random = new Random();
-		for (int count = 0; count < 6; ++count) {
-			Resource tempResource = new Resource(ResourceType.values()[random.nextInt(ResourceType.values().length)]);
-			tempResource.setLat(11.05 + random.nextDouble() * 0.1);
-			tempResource.setLon(124.367 + random.nextDouble() * 0.1);
-			ResourceManager.getInstance().addResource(tempResource);
-		}
-		for (int count = 0; count < 3; count++) {
-			Resource tempResource = new Resource(ResourceType.values()[random.nextInt(ResourceType.values().length)]);
-			tempResource.setLat(14.195 + random.nextDouble() * 0.1);
-			tempResource.setLon(121.260 + random.nextDouble() * 0.1);
-			ResourceManager.getInstance().addResource(tempResource);
-		}
+		ResourceManager.getInstance().addResource(new Resource(
+				"Ownship", ResourceType.SHIP, 11.05, 124.367, "USS George Washington"));
+		ResourceManager.getInstance().addResource(new Resource(
+				"Palawan", ResourceType.FOODWATER, 9.9798, 118.34, "10 tons"));
+		ResourceManager.getInstance().addResource(new Resource(
+				"Davao", ResourceType.AMMO, 7.3775, 125.4765, "740 rounds"));
+		ResourceManager.getInstance().addResource(new Resource(
+				"Manila", ResourceType.CLOTHING, 14.7279, 120.8368, "6 tons"));
+		ResourceManager.getInstance().addResource(new Resource(
+				"Manado", ResourceType.MEDICAL, 1.5525, 124.8265, "23 crates"));
+
 		ResourceManager.getInstance().notifyResourcesChanged();
 	}
 

@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
@@ -64,18 +63,18 @@ public class CustomInfoWindowAdapter implements InfoWindowAdapter {
 		} else {
 			titleUi.setText("");
 		}
-		
+
 		TextView amountUi = ((TextView) view.findViewById(R.id.amount));
 		for (Resource resource : ResourceManager.getInstance().getResources()) {
-			if (resourceMarkers.get(resource).equals(marker)) {
-				SpannableString titleText = new SpannableString(title);
-				titleText.setSpan(new ForegroundColorSpan(Color.RED), 0, titleText.length(), 0);
-				amountUi.setText(titleText);
+			if (resourceMarkers.get(resource).getMarker().equals(marker)) {
+				SpannableString flavorText = new SpannableString(resource.getFlavorText());
+				flavorText.setSpan(new ForegroundColorSpan(Color.BLACK), 0, flavorText.length(), 0);
+				amountUi.setText(flavorText);
 				break;
 			}else{
 				amountUi.setText("100%");
 			}
 		}
-		
+
 	}
 }

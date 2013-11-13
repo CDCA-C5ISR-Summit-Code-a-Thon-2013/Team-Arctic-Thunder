@@ -8,14 +8,12 @@ public class Resource {
 	private double lat = 0;
 	private double lon = 0;
 
-	public Resource(final String name, final ResourceType t) {
+	public Resource(final String name, final ResourceType resourceType, final double latitude, final double longitude, final String text) {
 		resourceName = name;
-		type = t;
-	}
-
-	public Resource(final ResourceType t) {
-		resourceName = t.getDescription();
-		type = t;
+		type = resourceType;
+		lat = latitude;
+		lon = longitude;
+		flavorText = text;
 	}
 
 	public ResourceType getType() {
