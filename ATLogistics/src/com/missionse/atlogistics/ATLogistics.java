@@ -2,16 +2,22 @@ package com.missionse.atlogistics;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.Menu;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.missionse.atlogistics.maps.LeftMapsFragment;
+import com.missionse.atlogistics.maps.RightMapsFragment;
 
 public class ATLogistics extends Activity {
 
 	private SlidingMenu navigationMenu;
 	private SlidingMenu filterMenu;
+
+	private RightMapsFragment rightMapsFragment;
+	private LeftMapsFragment leftMapsFragment;
 
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
@@ -20,6 +26,12 @@ public class ATLogistics extends Activity {
 
 		createNavigationMenu();
 		createFilterMenu();
+
+		rightMapsFragment = new RightMapsFragment();
+		leftMapsFragment = new LeftMapsFragment();
+
+		showRightMap();
+		showLeftMap();
 	}
 
 	private void createNavigationMenu() {
@@ -63,12 +75,19 @@ public class ATLogistics extends Activity {
 		return true;
 	}
 
-	public void showMap() {
-		navigationMenu.showContent();
-	}
-
 	public void showResourceFinder() {
 		navigationMenu.showContent();
 	}
 
+	public void showRightMap() {
+		navigationMenu.showContent();
+		FragmentManager fragmentManager = getFragmentManager();
+		fragmentManager.beginTransaction().replace(R.id.right_content, rightMapsFragment).commit();
+	}
+
+	public void showLeftMap() {
+		navigationMenu.showContent();
+		FragmentManager fragmentManager = getFragmentManager();
+		fragmentManager.beginTransaction().replace(R.id.left_content, leftMapsFragment).commit();
+	}
 }

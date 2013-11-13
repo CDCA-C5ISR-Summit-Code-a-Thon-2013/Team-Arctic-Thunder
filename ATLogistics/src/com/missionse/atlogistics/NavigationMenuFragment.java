@@ -39,7 +39,7 @@ public class NavigationMenuFragment extends ListFragment {
 
 		String selectedItem = (String) listView.getAdapter().getItem(position);
 		if (selectedItem.equals("MAP")) {
-			activity.showMap();
+			activity.showLeftMap();
 		} else if (selectedItem.equals("RESOURCE FINDER")) {
 			activity.showResourceFinder();
 		}
