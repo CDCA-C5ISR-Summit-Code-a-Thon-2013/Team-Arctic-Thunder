@@ -10,21 +10,21 @@ public class AcceptThread extends Thread {
 
 	// The local server socket
 	private BluetoothService bluetoothService;
-	private BluetoothAdapter adapter;
+	private BluetoothAdapter bluetoothAdapter;
 	private BluetoothServerSocket serverSocket;
 
-	public AcceptThread(final BluetoothService service, final boolean secure) {
+	public AcceptThread(final BluetoothService service, final BluetoothAdapter adapter, final boolean secure) {
 		bluetoothService = service;
-		adapter = BluetoothAdapter.getDefaultAdapter();
+		bluetoothAdapter = adapter;
 
 		// Create a new listening server socket
 		try {
 			if (secure) {
-				serverSocket = adapter.listenUsingRfcommWithServiceRecord(BluetoothService.NAME_SECURE,
+				serverSocket = bluetoothAdapter.listenUsingRfcommWithServiceRecord(BluetoothService.NAME_SECURE,
 						BluetoothService.MY_UUID_SECURE);
 			} else {
-				serverSocket = adapter.listenUsingInsecureRfcommWithServiceRecord(BluetoothService.NAME_INSECURE,
-						BluetoothService.MY_UUID_INSECURE);
+				serverSocket = bluetoothAdapter.listenUsingInsecureRfcommWithServiceRecord(
+						BluetoothService.NAME_INSECURE, BluetoothService.MY_UUID_INSECURE);
 			}
 		} catch (IOException e) {
 			//We have a problem

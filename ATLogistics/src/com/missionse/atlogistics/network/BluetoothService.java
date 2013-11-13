@@ -39,7 +39,7 @@ public class BluetoothService {
 	public static final int STATE_CONNECTED = 3;  // now connected to a remote device
 
 	// Member fields
-	private final BluetoothAdapter adapter;
+	private BluetoothAdapter adapter;
 	private final Handler handler;
 	private AcceptThread secureAcceptThread;
 	private AcceptThread mInsecureAcceptThread;
@@ -48,14 +48,13 @@ public class BluetoothService {
 	private int serviceState;
 
 	public BluetoothService(final Context context, final Handler handler) {
+		this.handler = handler;
 		adapter = BluetoothAdapter.getDefaultAdapter();
 		setState(STATE_NONE);
-		this.handler = handler;
 	}
 
 	private synchronized void setState(final int state) {
 		serviceState = state;
-
 		handler.obtainMessage(MESSAGE_STATE_CHANGE, state, -1).sendToTarget();
 	}
 
@@ -64,19 +63,25 @@ public class BluetoothService {
 	}
 
 	public synchronized void start() {
-		cancelConnectionThreads();
+		if (serviceState == BluetoothService.STATE_NONE) {
+			restart();
+		}
+	}
 
-		setState(STATE_LISTEN);
+	public synchronized void restart() {
+		cancelConnectionThreads();
 
 		// Start the thread to listen on a BluetoothServerSocket
 		if (secureAcceptThread == null) {
-			secureAcceptThread = new AcceptThread(this, true);
+			secureAcceptThread = new AcceptThread(this, adapter, true);
 			secureAcceptThread.start();
 		}
 		if (mInsecureAcceptThread == null) {
-			mInsecureAcceptThread = new AcceptThread(this, false);
+			mInsecureAcceptThread = new AcceptThread(this, adapter, false);
 			mInsecureAcceptThread.start();
 		}
+
+		setState(STATE_LISTEN);
 	}
 
 	private void cancelConnectionThreads() {
@@ -95,19 +100,9 @@ public class BluetoothService {
 
 	public synchronized void connect(final BluetoothDevice device, final boolean secure) {
 
-		// Cancel any thread attempting to make a connection
-		if (serviceState == STATE_CONNECTING) {
-			if (mConnectThread != null) {
-				mConnectThread.cancel();
-				mConnectThread = null;
-			}
-		}
+		this.cancelConnectionThreads();
 
-		// Cancel any thread currently running a connection
-		if (mConnectedThread != null) {
-			mConnectedThread.cancel();
-			mConnectedThread = null;
-		}
+		adapter.cancelDiscovery();
 
 		// Start the thread to connect with the given device
 		mConnectThread = new ConnectThread(this, device, secure);
@@ -115,22 +110,8 @@ public class BluetoothService {
 		setState(STATE_CONNECTING);
 	}
 
-	public synchronized void connected(final BluetoothSocket socket, final BluetoothDevice device,
-			final String socketType) {
-
-	}
-
 	public synchronized void stop() {
-
-		if (mConnectThread != null) {
-			mConnectThread.cancel();
-			mConnectThread = null;
-		}
-
-		if (mConnectedThread != null) {
-			mConnectedThread.cancel();
-			mConnectedThread = null;
-		}
+		cancelConnectionThreads();
 
 		if (secureAcceptThread != null) {
 			secureAcceptThread.cancel();
@@ -144,18 +125,19 @@ public class BluetoothService {
 		setState(STATE_NONE);
 	}
 
-	public void write(final byte[] out) {
+	public boolean write(final byte[] out) {
 		// Create temporary object
 		ConnectedThread r;
 		// Synchronize a copy of the ConnectedThread
 		synchronized (this) {
 			if (serviceState != STATE_CONNECTED) {
-				return;
+				return false;
 			}
 			r = mConnectedThread;
 		}
 		// Perform the write unsynchronized
 		r.write(out);
+		return true;
 	}
 
 	public void onConnectionFailed() {
@@ -167,7 +149,7 @@ public class BluetoothService {
 		handler.sendMessage(msg);
 
 		// Start the service over to restart listening mode
-		BluetoothService.this.start();
+		restart();
 	}
 
 	public void onConnectionLost() {
@@ -179,7 +161,7 @@ public class BluetoothService {
 		handler.sendMessage(msg);
 
 		// Start the service over to restart listening mode
-		BluetoothService.this.start();
+		restart();
 	}
 
 	public void onConnectionAccepted(final BluetoothSocket socket, final BluetoothDevice remoteDevice) {
@@ -196,7 +178,13 @@ public class BluetoothService {
 	}
 
 	public void onConnectionSuccessful(final BluetoothSocket socket, final BluetoothDevice remoteDevice) {
-		cancelConnectionThreads();
+		//cancelConnectionThreads();
+
+		// Cancel any thread currently running a connection
+		if (mConnectedThread != null) {
+			mConnectedThread.cancel();
+			mConnectedThread = null;
+		}
 
 		// Cancel the accept thread because we only want to connect to one device
 		if (secureAcceptThread != null) {
