@@ -1,31 +1,27 @@
 package com.missionse.atlogistics.resources;
+
+import com.missionse.atlogistics.R;
+
 public enum ResourceType {
-	
-	FOOD(0,"Food"),
-	WATER(0,"Water"),
-	AMMO(0,"Ammo"),
-	CLOTHING(0,"Clothing"),
-	FUEL(0,"Fuel"),
-	MEDICAL(0,"Medical"),
-	VEHICLES(0,"Vehicles"),
-	PHOTO(0,"Photo"),
-	VIDEO(0,"Video"),
-	WAYPOINTS(0,"Waypoints"),
-	;
-	
+
+	FOODWATER(R.drawable.ic_launcher, "Food/Water"), AMMO(R.drawable.ic_launcher, "Ammo"), CLOTHING(
+			R.drawable.ic_launcher, "Clothing"), FUEL(R.drawable.ic_launcher, "Fuel"), MEDICAL(R.drawable.ic_launcher,
+			"Medical"), VEHICLES(R.drawable.ic_launcher, "Vehicles"), PHOTO(R.drawable.ic_launcher, "Photo"), VIDEO(
+			R.drawable.ic_launcher, "Video"), WAYPOINTS(R.drawable.ic_launcher, "Waypoints"), ;
+
 	private int resource;
 	private String text;
-	
-	ResourceType(final int resourceId, String description){
+
+	ResourceType(final int resourceId, final String description) {
 		resource = resourceId;
 		text = description;
 	}
-	
-	public int getResourceId(){
+
+	public int getResourceId() {
 		return resource;
 	}
-	
-	public String getDescription(){
+
+	public String getDescription() {
 		return text;
 	}
 
