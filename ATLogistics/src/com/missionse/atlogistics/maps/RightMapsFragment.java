@@ -1,5 +1,7 @@
 package com.missionse.atlogistics.maps;
 
+import java.util.HashMap;
+
 import android.app.Fragment;
 import android.location.Location;
 import android.os.Bundle;
@@ -24,7 +26,9 @@ import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.missionse.atlogistics.R;
+import com.missionse.atlogistics.resources.Resource;
 
 public class RightMapsFragment extends Fragment implements ConnectionCallbacks, OnConnectionFailedListener,
 LocationListener, OnMyLocationButtonClickListener, OnMapClickListener, OnMapLongClickListener {
@@ -37,15 +41,27 @@ LocationListener, OnMyLocationButtonClickListener, OnMapClickListener, OnMapLong
 
 	private View view;
 
+	private HashMap<Resource, Marker> markers;
+	private HashMap<Resource, Boolean> markerVisibilities;
+
 	private static final LocationRequest REQUEST = LocationRequest.create().setInterval(5000)
 			.setFastestInterval(16) // 16ms = 60fps
 			.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
 	private DualMapContainer mapContainer;
+
+
+	public RightMapsFragment() {
+		markers = new HashMap<Resource, Marker>();
+		markerVisibilities = new HashMap<Resource, Boolean>();
+	}
+
 	public void setMapContainer(final DualMapContainer container) {
 		mapContainer = container;
 		mapContainer.setRightMap(this);
 	}
+
+
 
 	public GoogleMap getMap() {
 		return map;
