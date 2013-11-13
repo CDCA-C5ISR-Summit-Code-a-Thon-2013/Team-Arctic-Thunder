@@ -24,5 +24,15 @@ public enum ResourceType {
 	public String getDescription() {
 		return text;
 	}
+	
+	public static CharSequence[] valuesAsCharSequence() {
+		CharSequence[] value = new CharSequence[values().length];
+		ResourceType[] types = values();
+		for (int i = 0; i < types.length; i++) {
+			value[i] = types[i].toString();
+		}
+		return value;
+	}
+
 
 }
