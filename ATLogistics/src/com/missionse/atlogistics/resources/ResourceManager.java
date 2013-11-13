@@ -5,11 +5,11 @@ import java.util.List;
 
 public class ResourceManager {
 	
-	public static ResourceManager instance;
+	private static ResourceManager instance;
 	
 	private List<Resource> resources;
 	
-	public ResourceManager getInstance(){
+	public static ResourceManager getInstance(){
 		if(instance == null){
 			instance = new ResourceManager();
 		}
