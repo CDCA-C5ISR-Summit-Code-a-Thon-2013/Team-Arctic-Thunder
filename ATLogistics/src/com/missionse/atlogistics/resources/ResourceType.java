@@ -10,8 +10,9 @@ public enum ResourceType {
 	FUEL(R.drawable.fuel, "Fuel"), 
 	MEDICAL(R.drawable.medical,"Medical"), 
 	VEHICLES(R.drawable.ic_launcher, "Vehicles"), 
-	PHOTO(R.drawable.ic_launcher, "Photo"), 
-	VIDEO(R.drawable.ic_launcher, "Video"), 
+	/*PHOTO(R.drawable.ic_launcher, "Photo"), 
+	VIDEO(R.drawable.ic_launcher, "Video"),
+	*/ 
 	WAYPOINTS(R.drawable.ic_launcher, "Waypoints"), ;
 
 	private int resource;

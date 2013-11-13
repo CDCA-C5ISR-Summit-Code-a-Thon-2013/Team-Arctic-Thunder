@@ -43,16 +43,16 @@ public class CustomInfoWindowAdapter implements InfoWindowAdapter {
 	}
 
 	private void render(final Marker marker, final View view) {
-		int badge = 0;
+		//int badge = 0;
 
-		for (Resource resource : ResourceManager.getInstance().getResources()) {
-			if (resourceMarkers.get(resource).equals(marker)) {
-				badge = resource.getType().getResourceId();
-				break;
-			}
-		}
+		//for (Resource resource : ResourceManager.getInstance().getResources()) {
+		//	if (resourceMarkers.get(resource).equals(marker)) {
+		//		badge = resource.getType().getResourceId();
+		//		break;
+		//	}
+		//}
 
-		((ImageView) view.findViewById(R.id.badge)).setImageResource(badge);
+		//((ImageView) view.findViewById(R.id.badge)).setImageResource(badge);
 
 		String title = marker.getTitle();
 		TextView titleUi = ((TextView) view.findViewById(R.id.title));
@@ -64,5 +64,18 @@ public class CustomInfoWindowAdapter implements InfoWindowAdapter {
 		} else {
 			titleUi.setText("");
 		}
+		
+		TextView amountUi = ((TextView) view.findViewById(R.id.amount));
+		for (Resource resource : ResourceManager.getInstance().getResources()) {
+			if (resourceMarkers.get(resource).equals(marker)) {
+				SpannableString titleText = new SpannableString(title);
+				titleText.setSpan(new ForegroundColorSpan(Color.RED), 0, titleText.length(), 0);
+				amountUi.setText(titleText);
+				break;
+			}else{
+				amountUi.setText("100%");
+			}
+		}
+		
 	}
 }

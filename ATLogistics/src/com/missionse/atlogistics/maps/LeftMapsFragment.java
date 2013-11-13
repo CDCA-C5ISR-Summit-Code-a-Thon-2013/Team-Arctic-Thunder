@@ -3,6 +3,7 @@ package com.missionse.atlogistics.maps;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.app.Fragment;
 import android.graphics.Color;
@@ -237,5 +238,13 @@ public class LeftMapsFragment extends Fragment implements ConnectionCallbacks, O
 
 	public void setResourceVisibility(final ResourceType resourceType, final boolean isChecked) {
 		markerVisibilities.put(resourceType, Boolean.valueOf(isChecked));
+		for(Map.Entry<Resource, ResourceMarker> entry : markers.entrySet()){
+			Resource r = entry.getKey();
+			ResourceMarker m = entry.getValue();
+			if(r.getType() == resourceType){
+				m.setVisible(isChecked);
+			}
+		}
+		
 	}
 }

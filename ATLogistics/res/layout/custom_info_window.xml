@@ -19,6 +19,7 @@
   android:layout_height="wrap_content"
   android:background="@drawable/custom_info_bubble"
   android:orientation="horizontal">
+  <!-- Removing the image view and replacing with textview
   <ImageView
     android:id="@+id/badge"
     android:layout_width="50dp"
@@ -26,12 +27,23 @@
     android:layout_marginRight="5dp"
     android:adjustViewBounds="true">
   </ImageView>
+  -->
   <LinearLayout
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical">
     <TextView
       android:id="@+id/title"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:ellipsize="end"
+      android:singleLine="true"
+      android:textColor="#ff000000"
+      android:textSize="14dp"
+      android:textStyle="bold"/>
+    <TextView
+      android:id="@+id/amount"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center_horizontal"

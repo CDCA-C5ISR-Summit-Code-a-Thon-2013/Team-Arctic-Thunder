@@ -94,13 +94,13 @@ public class ATLogistics extends Activity implements ObjectLoadedListener {
 
 	private void addDummyData() {
 		Random random = new Random();
-		for (int count = 0; count < 20; ++count) {
+		for (int count = 0; count < 6; ++count) {
 			Resource tempResource = new Resource(ResourceType.values()[random.nextInt(ResourceType.values().length)]);
 			tempResource.setLat(11.05 + random.nextDouble() * 0.1);
 			tempResource.setLon(124.367 + random.nextDouble() * 0.1);
 			ResourceManager.getInstance().addResource(tempResource);
 		}
-		for(int count = 0; count < 10; count++){
+		for(int count = 0; count < 3; count++){
 			Resource tempResource = new Resource(ResourceType.values()[random.nextInt(ResourceType.values().length)]);
 			tempResource.setLat(14.195 + random.nextDouble() * 0.1);
 			tempResource.setLon(121.260 + random.nextDouble() * 0.1);
