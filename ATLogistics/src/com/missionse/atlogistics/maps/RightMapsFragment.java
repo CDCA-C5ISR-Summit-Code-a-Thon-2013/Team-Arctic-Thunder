@@ -30,6 +30,7 @@ import com.missionse.atlogistics.R;
 import com.missionse.atlogistics.resources.Resource;
 import com.missionse.atlogistics.resources.ResourceChangeListener;
 import com.missionse.atlogistics.resources.ResourceManager;
+import com.missionse.atlogistics.resources.ResourceType;
 
 public class RightMapsFragment extends Fragment implements ConnectionCallbacks, OnConnectionFailedListener,
 		LocationListener, OnMyLocationButtonClickListener, OnMapClickListener, OnMapLongClickListener,
@@ -44,7 +45,7 @@ public class RightMapsFragment extends Fragment implements ConnectionCallbacks, 
 	private View view;
 
 	private HashMap<Resource, ResourceMarker> markers;
-	private HashMap<Resource, Boolean> markerVisibilities;
+	private HashMap<ResourceType, Boolean> markerVisibilities;
 
 	private static final LocationRequest REQUEST = LocationRequest.create().setInterval(5000).setFastestInterval(16) // 16ms = 60fps
 			.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -53,7 +54,11 @@ public class RightMapsFragment extends Fragment implements ConnectionCallbacks, 
 
 	public RightMapsFragment() {
 		markers = new HashMap<Resource, ResourceMarker>();
-		markerVisibilities = new HashMap<Resource, Boolean>();
+		markerVisibilities = new HashMap<ResourceType, Boolean>();
+
+		for (ResourceType resourceType : ResourceType.values()) {
+			markerVisibilities.put(resourceType, Boolean.TRUE);
+		}
 	}
 
 	public void setMapContainer(final DualMapContainer container) {
@@ -152,7 +157,7 @@ public class RightMapsFragment extends Fragment implements ConnectionCallbacks, 
 			@Override
 			public void onMapLoaded() {
 				map.animateCamera(CameraUpdateFactory
-						.newCameraPosition(new CameraPosition(HOME, 17.5f, 0, HOME_BEARING)));
+						.newCameraPosition(new CameraPosition(HOME, 5.2f, 0, HOME_BEARING)));
 			}
 		});
 		map.setOnCameraChangeListener(new OnCameraChangeListener() {
@@ -187,5 +192,9 @@ public class RightMapsFragment extends Fragment implements ConnectionCallbacks, 
 			ResourceMarker marker = new ResourceMarker(map, resource);
 			markers.put(resource, marker);
 		}
+	}
+
+	public void setResourceVisibility(final ResourceType resourceType, final boolean isChecked) {
+		markerVisibilities.put(resourceType, Boolean.valueOf(isChecked));
 	}
 }

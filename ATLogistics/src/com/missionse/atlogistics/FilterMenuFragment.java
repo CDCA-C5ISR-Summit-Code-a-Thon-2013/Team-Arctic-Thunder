@@ -30,7 +30,7 @@ public class FilterMenuFragment extends Fragment {
 	private Button showAllButton;
 	private Button hideAllButton;
 
-	private HashMap<String, CheckBox> checkboxes = new HashMap<String, CheckBox>();
+	private HashMap<ResourceType, CheckBox> checkboxes = new HashMap<ResourceType, CheckBox>();
 
 	@Override
 	public void onActivityCreated(final Bundle savedInstanceState) {
@@ -52,7 +52,7 @@ public class FilterMenuFragment extends Fragment {
 		showAllButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(final View arg0) {
-				for (Entry<String, CheckBox> entry : checkboxes.entrySet()) {
+				for (Entry<ResourceType, CheckBox> entry : checkboxes.entrySet()) {
 					entry.getValue().setChecked(true);
 				}
 			}
@@ -61,7 +61,7 @@ public class FilterMenuFragment extends Fragment {
 		hideAllButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(final View arg0) {
-				for (Entry<String, CheckBox> entry : checkboxes.entrySet()) {
+				for (Entry<ResourceType, CheckBox> entry : checkboxes.entrySet()) {
 					entry.getValue().setChecked(false);
 				}
 			}
@@ -104,7 +104,7 @@ public class FilterMenuFragment extends Fragment {
 						}
 					});
 
-					checkboxes.put(textLabel, checkBox);
+					checkboxes.put(resource, checkBox);
 				}
 			}
 			return convertView;
@@ -113,5 +113,10 @@ public class FilterMenuFragment extends Fragment {
 
 	public void onCheckboxStateChange(final String item, final boolean isChecked) {
 		Log.e("FilterMenu", "item: " + item + " is now " + isChecked);
+		for (ResourceType resourceType : ResourceType.values()) {
+			if (item.equals(resourceType.getDescription())) {
+				((ATLogistics) getActivity()).setResourceShown(resourceType, isChecked);
+			}
+		}
 	}
 }

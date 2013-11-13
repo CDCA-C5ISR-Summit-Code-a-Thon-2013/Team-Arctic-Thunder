@@ -1,6 +1,7 @@
 package com.missionse.atlogistics.maps;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import android.app.Fragment;
@@ -31,9 +32,14 @@ import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.VisibleRegion;
 import com.missionse.atlogistics.R;
+import com.missionse.atlogistics.resources.Resource;
+import com.missionse.atlogistics.resources.ResourceChangeListener;
+import com.missionse.atlogistics.resources.ResourceManager;
+import com.missionse.atlogistics.resources.ResourceType;
 
 public class LeftMapsFragment extends Fragment implements ConnectionCallbacks, OnConnectionFailedListener,
-		LocationListener, OnMyLocationButtonClickListener, OnMapClickListener, OnMapLongClickListener {
+		LocationListener, OnMyLocationButtonClickListener, OnMapClickListener, OnMapLongClickListener,
+		ResourceChangeListener {
 
 	private static final LatLng HOME = new LatLng(11.05, 124.367);
 	private static final float HOME_BEARING = 27f;
@@ -44,6 +50,18 @@ public class LeftMapsFragment extends Fragment implements ConnectionCallbacks, O
 	private Polygon zoomedViewPolygon;
 
 	private View view;
+
+	private HashMap<Resource, ResourceMarker> markers;
+	private HashMap<ResourceType, Boolean> markerVisibilities;
+
+	public LeftMapsFragment() {
+		markers = new HashMap<Resource, ResourceMarker>();
+		markerVisibilities = new HashMap<ResourceType, Boolean>();
+
+		for (ResourceType resourceType : ResourceType.values()) {
+			markerVisibilities.put(resourceType, Boolean.TRUE);
+		}
+	}
 
 	private static final LocationRequest REQUEST = LocationRequest.create().setInterval(5000).setFastestInterval(16) // 16ms = 60fps
 			.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -169,6 +187,10 @@ public class LeftMapsFragment extends Fragment implements ConnectionCallbacks, O
 				return false;
 			}
 		});
+
+		map.setInfoWindowAdapter(new CustomInfoWindowAdapter(getActivity(), markers));
+
+		ResourceManager.getInstance().addListener(this);
 	}
 
 	@Override
@@ -202,5 +224,18 @@ public class LeftMapsFragment extends Fragment implements ConnectionCallbacks, O
 				zoomedViewPolygon.setStrokeColor(strokeColor);
 			}
 		}
+	}
+
+	@Override
+	public void onResourcesChanged() {
+		markers.clear();
+		for (Resource resource : ResourceManager.getInstance().getResources()) {
+			ResourceMarker marker = new ResourceMarker(map, resource);
+			markers.put(resource, marker);
+		}
+	}
+
+	public void setResourceVisibility(final ResourceType resourceType, final boolean isChecked) {
+		markerVisibilities.put(resourceType, Boolean.valueOf(isChecked));
 	}
 }

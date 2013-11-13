@@ -135,4 +135,9 @@ public class ATLogistics extends Activity {
 		FragmentManager fragmentManager = getFragmentManager();
 		fragmentManager.beginTransaction().replace(R.id.left_content, leftMapsFragment).commit();
 	}
+
+	public void setResourceShown(final ResourceType resourceType, final boolean isChecked) {
+		rightMapsFragment.setResourceVisibility(resourceType, isChecked);
+		leftMapsFragment.setResourceVisibility(resourceType, isChecked);
+	}
 }
