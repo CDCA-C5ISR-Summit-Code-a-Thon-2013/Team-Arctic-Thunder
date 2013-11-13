@@ -37,14 +37,16 @@ public class ViewResourceSetup extends DefaultMultiSetup {
 	@Override
 	public void _b2_addDefaultWorldObjects(final World world) {
 		List<Resource> resources = ResourceManager.getInstance().getResources();
-
-		for (Resource r : resources) {
-			MeshComponent m = GLFactory.getInstance().newTexturedSquare(r.getResourceName(),
-					IO.loadBitmapFromId(getActivity(), r.getType().getResourceId()));
-
-			m.addChild(new AnimationFaceToCamera(getCamera(), 0.5f));
-			m.setScale(new Vec(3, 3, 3));
-
+		for(Resource r : resources){
+			MeshComponent m = GLFactory.getInstance().newTexturedSquare(
+					r.getResourceName(),
+					IO.loadBitmapFromId(
+							getActivity(), 
+							r.getType().getResourceId()));
+			
+			m.addChild(new AnimationFaceToCamera(getCamera(),0.5f));
+			m.setScale(new Vec(3,3,8));
+			m.setPosition(new Vec(0,0,5));
 			TextView v = new TextView(getActivity());
 			v.setTypeface(null, Typeface.BOLD);
 			StringBuilder sb = new StringBuilder();
@@ -63,8 +65,6 @@ public class ViewResourceSetup extends DefaultMultiSetup {
 			final MeshComponent itemMesh = new Shape();
 			itemMesh.addChild(m);
 			//itemMesh.addChild(mesh);
-			itemMesh.addAnimation(new AnimationFaceToCamera(getCamera()));
-
 			Obj o = new Obj();
 			o.setComp(itemMesh);
 			o.setPosition(Vec.getNewRandomPosInXYPlane(getCamera().getPosition(), 10, 40));

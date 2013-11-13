@@ -21,6 +21,8 @@ import actions.Action;
 import actions.ActionCalcRelativePos;
 import actions.ActionMoveCameraBuffered;
 import actions.ActionRotateCameraBuffered;
+import actions.ActionRotateCameraBufferedDirect;
+import actions.ActionWASDMovement;
 import actions.ActionWaitForAccuracy;
 import android.app.Activity;
 import android.location.Location;
@@ -44,6 +46,10 @@ public abstract class DefaultMultiSetup extends MarkerDetectionSetup {
 	private boolean mWaitForGps;
 	private ActionWaitForAccuracy  mMinAccuracyAction;
 	private Action mRotatedGLCameraAction;
+
+	private ActionWASDMovement wasdAction;
+
+	private ActionRotateCameraBuffered rotateGLCameraAction;
 	
 	public DefaultMultiSetup(Activity parent, boolean waitForGps){
 		super(true);
@@ -53,6 +59,7 @@ public abstract class DefaultMultiSetup extends MarkerDetectionSetup {
 		mWorldUpdateListeners = new LinkedList<OnWorldUpdateListener>();
 		mWaitForGps = waitForGps;
 		mParentActivity = parent;
+		
 	}
 	
 	@Override
@@ -152,7 +159,9 @@ public abstract class DefaultMultiSetup extends MarkerDetectionSetup {
 			CustomGLSurfaceView arView, SystemUpdater updater) {
 		arView.addOnTouchMoveListener(new ActionMoveCameraBuffered(getCamera(), 5,
 				25));
+		//arView.addOnTouchMoveListener(new ActionRotateCameraBufferedDirect(getCamera()));
 		Action rot = new ActionRotateCameraBuffered(getCamera());
+		//Action rot = new ActionRotateCameraBufferedDirect(getCamera());
 		updater.addObjectToUpdateCycle(rot);
 		eventManager.addOnOrientationChangedAction(rot);
 		eventManager.addOnTrackballAction(new ActionMoveCameraBuffered(getCamera(),
@@ -180,6 +189,19 @@ public abstract class DefaultMultiSetup extends MarkerDetectionSetup {
 		
 		mRotatedGLCameraAction= new ActionRotateCameraBuffered(getCamera());
 		eventManager.addOnOrientationChangedAction(mRotatedGLCameraAction);
+		
+		
+		
+//		wasdAction = new ActionWASDMovement(getCamera(), 25, 50, 20);
+//		rotateGLCameraAction = new ActionRotateCameraBuffered(getCamera());
+//		eventManager.addOnOrientationChangedAction(rotateGLCameraAction);
+//
+//		arView.addOnTouchMoveListener(wasdAction);
+//		// eventManager.addOnOrientationChangedAction(rotateGLCameraAction);
+//		eventManager.addOnTrackballAction(new ActionMoveCameraBuffered(getCamera(),
+//				5, 25));
+//		eventManager.addOnLocationChangedAction(new ActionCalcRelativePos(
+//				getWorld(), getCamera()));
 
 	}
 	
@@ -187,6 +209,8 @@ public abstract class DefaultMultiSetup extends MarkerDetectionSetup {
 	public void _d_addElementsToUpdateThread(SystemUpdater updater) {
 		updater.addObjectToUpdateCycle(mWorld);
 		updater.addObjectToUpdateCycle(mRotatedGLCameraAction);
+		//updater.addObjectToUpdateCycle(wasdAction);
+		//updater.addObjectToUpdateCycle(rotateGLCameraAction);
 	}
 	
 	@Override
