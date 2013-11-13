@@ -239,7 +239,7 @@ public class LeftMapsFragment extends Fragment implements ConnectionCallbacks, O
 	public void onResourcesChanged() {
 		markers.clear();
 		for (Resource resource : ResourceManager.getInstance().getResources()) {
-			ResourceMarker marker = new ResourceMarker(map, resource);
+			ResourceMarker marker = new ResourceMarker(map, resource,getActivity());
 			markers.put(resource, marker);
 		}
 	}

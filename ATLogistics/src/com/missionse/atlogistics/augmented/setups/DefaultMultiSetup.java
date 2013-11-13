@@ -159,9 +159,7 @@ public abstract class DefaultMultiSetup extends MarkerDetectionSetup {
 			CustomGLSurfaceView arView, SystemUpdater updater) {
 		arView.addOnTouchMoveListener(new ActionMoveCameraBuffered(getCamera(), 5,
 				25));
-		//arView.addOnTouchMoveListener(new ActionRotateCameraBufferedDirect(getCamera()));
 		Action rot = new ActionRotateCameraBuffered(getCamera());
-		//Action rot = new ActionRotateCameraBufferedDirect(getCamera());
 		updater.addObjectToUpdateCycle(rot);
 		eventManager.addOnOrientationChangedAction(rot);
 		eventManager.addOnTrackballAction(new ActionMoveCameraBuffered(getCamera(),
@@ -190,27 +188,12 @@ public abstract class DefaultMultiSetup extends MarkerDetectionSetup {
 		mRotatedGLCameraAction= new ActionRotateCameraBuffered(getCamera());
 		eventManager.addOnOrientationChangedAction(mRotatedGLCameraAction);
 		
-		
-		
-//		wasdAction = new ActionWASDMovement(getCamera(), 25, 50, 20);
-//		rotateGLCameraAction = new ActionRotateCameraBuffered(getCamera());
-//		eventManager.addOnOrientationChangedAction(rotateGLCameraAction);
-//
-//		arView.addOnTouchMoveListener(wasdAction);
-//		// eventManager.addOnOrientationChangedAction(rotateGLCameraAction);
-//		eventManager.addOnTrackballAction(new ActionMoveCameraBuffered(getCamera(),
-//				5, 25));
-//		eventManager.addOnLocationChangedAction(new ActionCalcRelativePos(
-//				getWorld(), getCamera()));
-
 	}
 	
 	@Override
 	public void _d_addElementsToUpdateThread(SystemUpdater updater) {
 		updater.addObjectToUpdateCycle(mWorld);
 		updater.addObjectToUpdateCycle(mRotatedGLCameraAction);
-		//updater.addObjectToUpdateCycle(wasdAction);
-		//updater.addObjectToUpdateCycle(rotateGLCameraAction);
 	}
 	
 	@Override

@@ -1,5 +1,6 @@
 package com.missionse.atlogistics.augmented.setups;
 
+import gl.Color;
 import gl.GLFactory;
 import gl.animations.AnimationFaceToCamera;
 import gl.scenegraph.MeshComponent;
@@ -45,29 +46,37 @@ public class ViewResourceSetup extends DefaultMultiSetup {
 							r.getType().getResourceId()));
 			
 			m.addChild(new AnimationFaceToCamera(getCamera(),0.5f));
-			m.setScale(new Vec(3,3,8));
-			m.setPosition(new Vec(0,0,5));
+			m.setScale(new Vec(2,2,2));
+			m.setPosition(new Vec(0,0,2));
+			m.setColor(Color.green());
 			TextView v = new TextView(getActivity());
 			v.setTypeface(null, Typeface.BOLD);
+			v.setTextSize(9);
 			StringBuilder sb = new StringBuilder();
 			sb.append(r.getResourceName() + ": ");
-			//sb.append("(" + r.getCount() + "/" + r.getFillCount() + ")");
+			if(r.getFlavorText().equals("")){
+				sb.append("(100%)");
+			}else{
+				sb.append("(" + r.getFlavorText() + ")");
+			}
 			v.setText(sb.toString());
 
 			Random ran = new Random();
 
-			//MeshComponent mesh = GLFactory.getInstance().newTexturedSquare(
-			//		"txtView" + r.getResourceName() + r.getCount() + r.getFillCount() + ran.nextInt(100) , 
-			//		util.IO.loadBitmapFromView(v), 
-			//		2);
-			//mesh.addAnimation(new AnimationFaceToCamera(getCamera()));
+			MeshComponent mesh = GLFactory.getInstance().newTexturedSquare(
+					"txtView" + r.getResourceName() + r.getFlavorText() + ran.nextInt(100) , 
+					util.IO.loadBitmapFromView(v), 
+					1);
+			mesh.setColor(Color.green());
+			mesh.addAnimation(new AnimationFaceToCamera(getCamera()));
 
 			final MeshComponent itemMesh = new Shape();
 			itemMesh.addChild(m);
-			//itemMesh.addChild(mesh);
+			itemMesh.addChild(mesh);
+			
 			Obj o = new Obj();
 			o.setComp(itemMesh);
-			o.setPosition(Vec.getNewRandomPosInXYPlane(getCamera().getPosition(), 10, 40));
+			o.setPosition(Vec.getNewRandomPosInXYPlane(getCamera().getPosition(), 15, 50));
 			//o.setMyLatitude(Vec.);
 			//o.setMyLongitude(r.getLon());
 			//o.setMyAltitude(getCamera().getGPSPositionAsGeoObj().getAltitude());
