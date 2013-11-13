@@ -10,7 +10,6 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
@@ -19,11 +18,13 @@ import com.missionse.atlogistics.augmented.setups.ViewResourceSetup;
 import com.missionse.atlogistics.maps.DualMapContainer;
 import com.missionse.atlogistics.maps.LeftMapsFragment;
 import com.missionse.atlogistics.maps.RightMapsFragment;
+import com.missionse.atlogistics.modelviewer.ModelViewerFragment;
+import com.missionse.atlogistics.modelviewer.ObjectLoadedListener;
 import com.missionse.atlogistics.resources.Resource;
 import com.missionse.atlogistics.resources.ResourceManager;
 import com.missionse.atlogistics.resources.ResourceType;
 
-public class ATLogistics extends Activity {
+public class ATLogistics extends Activity implements ObjectLoadedListener {
 
 	private SlidingMenu navigationMenu;
 	private SlidingMenu filterMenu;
@@ -31,6 +32,8 @@ public class ATLogistics extends Activity {
 	private RightMapsFragment rightMapsFragment;
 	private LeftMapsFragment leftMapsFragment;
 	private DualMapContainer mapContainer;
+
+	private ModelViewerFragment modelViewerFragment;
 
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
@@ -45,6 +48,9 @@ public class ATLogistics extends Activity {
 		rightMapsFragment.setMapContainer(mapContainer);
 		leftMapsFragment = new LeftMapsFragment();
 		leftMapsFragment.setMapContainer(mapContainer);
+
+		modelViewerFragment = new ModelViewerFragment();
+		modelViewerFragment.registerObjectLoadedListener(this);
 
 		showRightMap();
 		showLeftMap();
@@ -103,7 +109,7 @@ public class ATLogistics extends Activity {
 		String action = intent.getAction();
 		if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action) || NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)
 				|| NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
-			Log.e("something", "got nfc");
+			showModel();
 		}
 	}
 
@@ -139,5 +145,17 @@ public class ATLogistics extends Activity {
 	public void setResourceShown(final ResourceType resourceType, final boolean isChecked) {
 		rightMapsFragment.setResourceVisibility(resourceType, isChecked);
 		leftMapsFragment.setResourceVisibility(resourceType, isChecked);
+	}
+
+	public void showModel() {
+		navigationMenu.showContent();
+		FragmentManager fragmentManager = getFragmentManager();
+		fragmentManager.beginTransaction().replace(R.id.left_content, modelViewerFragment).commit();
+	}
+
+	@Override
+	public void onObjectLoaded() {
+		modelViewerFragment.getAnimator().scaleTo(0.25f, 2000);
+		modelViewerFragment.getAnimator().rotateTo(0f, 45f, 0f, 2000);
 	}
 }
