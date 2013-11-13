@@ -1,6 +1,7 @@
 package com.missionse.atlogistics.maps;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import android.app.Fragment;
 import android.location.Location;
@@ -196,5 +197,13 @@ public class RightMapsFragment extends Fragment implements ConnectionCallbacks, 
 
 	public void setResourceVisibility(final ResourceType resourceType, final boolean isChecked) {
 		markerVisibilities.put(resourceType, Boolean.valueOf(isChecked));
+		for(Map.Entry<Resource, ResourceMarker> entry : markers.entrySet()){
+			Resource r = entry.getKey();
+			ResourceMarker m = entry.getValue();
+			if(r.getType() == resourceType){
+				m.setVisible(isChecked);
+			}
+		}
+		
 	}
 }

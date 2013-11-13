@@ -100,6 +100,12 @@ public class ATLogistics extends Activity implements ObjectLoadedListener {
 			tempResource.setLon(124.367 + random.nextDouble() * 0.1);
 			ResourceManager.getInstance().addResource(tempResource);
 		}
+		for(int count = 0; count < 10; count++){
+			Resource tempResource = new Resource(ResourceType.values()[random.nextInt(ResourceType.values().length)]);
+			tempResource.setLat(14.195 + random.nextDouble() * 0.1);
+			tempResource.setLon(121.260 + random.nextDouble() * 0.1);
+			ResourceManager.getInstance().addResource(tempResource);
+		}
 		ResourceManager.getInstance().notifyResourcesChanged();
 	}
 
