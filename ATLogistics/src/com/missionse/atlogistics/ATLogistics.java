@@ -35,6 +35,8 @@ public class ATLogistics extends Activity implements ObjectLoadedListener {
 
 	private ModelViewerFragment modelViewerFragment;
 
+	private int lastLoadedModel = 0;
+
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -115,7 +117,9 @@ public class ATLogistics extends Activity implements ObjectLoadedListener {
 		String action = intent.getAction();
 		if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action) || NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)
 				|| NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
-			showModel();
+			showLeftMap();
+			getFragmentManager().executePendingTransactions();
+			showModel(R.raw.helicopter_obj);
 		}
 	}
 
@@ -153,15 +157,33 @@ public class ATLogistics extends Activity implements ObjectLoadedListener {
 		leftMapsFragment.setResourceVisibility(resourceType, isChecked);
 	}
 
-	public void showModel() {
+	public void showModel(final int model) {
 		navigationMenu.showContent();
+
+		modelViewerFragment.setModel(model);
+		switch (model) {
+			case R.raw.helicopter_obj:
+				modelViewerFragment.setModelText(R.string.helicopter_text);
+				break;
+			case R.raw.wooden_crate_ammo_obj:
+				modelViewerFragment.setModelText(R.string.ammunition_text);
+		}
+
 		FragmentManager fragmentManager = getFragmentManager();
 		fragmentManager.beginTransaction().replace(R.id.left_content, modelViewerFragment).commit();
+		lastLoadedModel = model;
 	}
 
 	@Override
 	public void onObjectLoaded() {
-		modelViewerFragment.getAnimator().scaleTo(0.25f, 2000);
-		modelViewerFragment.getAnimator().rotateTo(0f, 45f, 0f, 2000);
+		switch (lastLoadedModel) {
+			case R.raw.helicopter_obj:
+				modelViewerFragment.getAnimator().scaleTo(0.25f, 2000);
+				modelViewerFragment.getAnimator().rotateTo(0f, 45f, 0f, 2000);
+				break;
+			case R.raw.wooden_crate_ammo_obj:
+				modelViewerFragment.getAnimator().rotateTo(0f, 45f, 0f, 2000);
+				break;
+		}
 	}
 }

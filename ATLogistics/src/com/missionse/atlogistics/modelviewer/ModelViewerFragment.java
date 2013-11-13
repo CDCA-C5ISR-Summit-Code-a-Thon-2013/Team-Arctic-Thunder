@@ -13,6 +13,7 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.missionse.atlogistics.R;
 import com.missionse.atlogistics.gesturedetector.PanGestureDetector;
@@ -29,8 +30,19 @@ public class ModelViewerFragment extends RajawaliFragment implements OnTouchList
 	private PanGestureDetector panGestureDetector;
 	private ArrayList<ObjectLoadedListener> objectLoadedListeners;
 
+	private int modelID = 0;
+	private int modelText = 0;
+
 	public ModelViewerFragment() {
 		objectLoadedListeners = new ArrayList<ObjectLoadedListener>();
+	}
+
+	public void setModel(final int model) {
+		modelID = model;
+	}
+
+	public void setModelText(final int text) {
+		modelText = text;
 	}
 
 	@Override
@@ -39,7 +51,11 @@ public class ModelViewerFragment extends RajawaliFragment implements OnTouchList
 
 		setGLBackgroundTransparent(true);
 
-		renderer = new ModelViewerRenderer(getActivity(), this);
+		if (modelID == 0) {
+			modelID = R.raw.wooden_crate_ammo_obj;
+		}
+
+		renderer = new ModelViewerRenderer(getActivity(), this, modelID);
 		renderer.setSurfaceView(mSurfaceView);
 		setRenderer(renderer);
 
@@ -68,7 +84,8 @@ public class ModelViewerFragment extends RajawaliFragment implements OnTouchList
 		mLayout.findViewById(R.id.progress_bar_container).bringToFront();
 		progressBar = (ProgressBar) mLayout.findViewById(R.id.progress_bar);
 
-		mLayout.findViewById(R.id.model_resource_container).bringToFront();
+		mLayout.findViewById(R.id.resource_details).bringToFront();
+		((TextView) mLayout.findViewById(R.id.resource_details)).setText(modelText);
 
 		return mLayout;
 	}

@@ -27,6 +27,8 @@ import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.missionse.atlogistics.ATLogistics;
 import com.missionse.atlogistics.R;
 import com.missionse.atlogistics.resources.Resource;
 import com.missionse.atlogistics.resources.ResourceChangeListener;
@@ -173,6 +175,15 @@ public class RightMapsFragment extends Fragment implements ConnectionCallbacks, 
 			}
 		});
 		map.setInfoWindowAdapter(new CustomInfoWindowAdapter(getActivity(), markers));
+
+		map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+			@Override
+			public void onInfoWindowClick(final Marker marker) {
+				((ATLogistics) getActivity()).showLeftMap();
+				((ATLogistics) getActivity()).getFragmentManager().executePendingTransactions();
+				((ATLogistics) getActivity()).showModel(R.raw.wooden_crate_ammo_obj);
+			}
+		});
 
 		ResourceManager.getInstance().addListener(this);
 	}

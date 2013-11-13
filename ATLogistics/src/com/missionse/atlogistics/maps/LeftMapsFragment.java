@@ -32,6 +32,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.VisibleRegion;
+import com.missionse.atlogistics.ATLogistics;
 import com.missionse.atlogistics.R;
 import com.missionse.atlogistics.resources.Resource;
 import com.missionse.atlogistics.resources.ResourceChangeListener;
@@ -186,6 +187,13 @@ public class LeftMapsFragment extends Fragment implements ConnectionCallbacks, O
 					drawZoomedViewPolygon();
 				}
 				return false;
+			}
+		});
+
+		map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+			@Override
+			public void onInfoWindowClick(final Marker marker) {
+				((ATLogistics) getActivity()).showModel(R.raw.wooden_crate_ammo_obj);
 			}
 		});
 

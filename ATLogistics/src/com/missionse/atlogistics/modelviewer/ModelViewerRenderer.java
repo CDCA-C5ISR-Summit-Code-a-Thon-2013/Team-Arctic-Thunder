@@ -11,8 +11,6 @@ import rajawali.renderer.RajawaliRenderer;
 import android.content.Context;
 import android.util.Log;
 
-import com.missionse.atlogistics.R;
-
 public class ModelViewerRenderer extends RajawaliRenderer {
 	private static final String TAG = "ModelViewerRenderer";
 
@@ -24,10 +22,13 @@ public class ModelViewerRenderer extends RajawaliRenderer {
 	private ModelController modelController;
 	private ModelAnimationController animationController;
 
-	public ModelViewerRenderer(final Context context, final ModelViewerFragment modelViewerFragment) {
+	private int modelID;
+
+	public ModelViewerRenderer(final Context context, final ModelViewerFragment modelViewerFragment, final int model) {
 		super (context);
 		setFrameRate(60);
 		fragment = modelViewerFragment;
+		modelID = model;
 		modelController = new ModelController();
 		animationController = new ModelAnimationController(this);
 	}
@@ -57,7 +58,7 @@ public class ModelViewerRenderer extends RajawaliRenderer {
 		getCurrentScene().addLight(directionalLight);
 		getCurrentCamera().setZ(16);
 
-		LoaderOBJ objParser = new LoaderOBJ(this, R.raw.helicopter_obj);
+		LoaderOBJ objParser = new LoaderOBJ(this, modelID);
 
 		try {
 			objParser.parse();
