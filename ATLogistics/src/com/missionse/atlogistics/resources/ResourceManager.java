@@ -2,6 +2,9 @@ package com.missionse.atlogistics.resources;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
+
+import android.content.res.Resources;
 
 public class ResourceManager {
 
@@ -18,7 +21,12 @@ public class ResourceManager {
 
 	private ResourceManager(){
 		resources = new LinkedList<Resource>();
-
+		resources.add(new Resource(ResourceType.MEDICAL));
+		Random m = new Random();
+		for(int x = 0; x < 20; x++){
+			resources.add(new Resource(ResourceType.values()[m.nextInt(ResourceType.values().length)]));
+		}
+		
 	}
 
 

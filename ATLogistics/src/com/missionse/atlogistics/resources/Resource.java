@@ -20,6 +20,16 @@ public class Resource {
 		count = 0;
 		fillCount = 0;
 	}
+	
+	public Resource(ResourceType t){
+		resourceName = t.getDescription();
+		type = t;
+		
+		lat = 0;
+		lon = 0;
+		count = 0;
+		fillCount = 0;
+	}
 
 
 	public ResourceType getType() {

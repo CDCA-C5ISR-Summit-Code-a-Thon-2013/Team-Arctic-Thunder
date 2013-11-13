@@ -1,5 +1,6 @@
 package com.missionse.atlogistics;
 
+import system.ArActivity;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -12,6 +13,8 @@ import android.view.Menu;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.missionse.atlogistics.maps.DualMapContainer;
+import com.missionse.atlogistics.augmented.setups.DefaultMultiSetup;
+import com.missionse.atlogistics.augmented.setups.ViewResourceSetup;
 import com.missionse.atlogistics.maps.LeftMapsFragment;
 import com.missionse.atlogistics.maps.RightMapsFragment;
 
@@ -95,6 +98,13 @@ public class ATLogistics extends Activity {
 
 	public void showResourceFinder() {
 		navigationMenu.showContent();
+		DefaultMultiSetup s = new ViewResourceSetup(this);
+		startAR(s);
+		
+	}
+	
+	private void startAR(DefaultMultiSetup s){
+		ArActivity.startWithSetup(this, s);
 	}
 
 	public void showRightMap() {
