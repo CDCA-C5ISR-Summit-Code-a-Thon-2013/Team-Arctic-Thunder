@@ -63,4 +63,12 @@ public class ATLogistics extends Activity {
 		return true;
 	}
 
+	public void showMap() {
+		navigationMenu.showContent();
+	}
+
+	public void showResourceFinder() {
+		navigationMenu.showContent();
+	}
+
 }
