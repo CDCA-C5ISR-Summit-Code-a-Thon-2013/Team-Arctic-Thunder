@@ -56,6 +56,8 @@ public class LeftMapsFragment extends Fragment implements ConnectionCallbacks, O
 	private HashMap<Resource, ResourceMarker> markers;
 	private HashMap<ResourceType, Boolean> markerVisibilities;
 
+	private boolean isLoaded = false;
+
 	public LeftMapsFragment() {
 		markers = new HashMap<Resource, ResourceMarker>();
 		markerVisibilities = new HashMap<ResourceType, Boolean>();
@@ -166,13 +168,14 @@ public class LeftMapsFragment extends Fragment implements ConnectionCallbacks, O
 			@Override
 			public void onMapLoaded() {
 				map.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(HOME, 15f, 0, HOME_BEARING)));
+				isLoaded = true;
 			}
 		});
 
 		map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 			@Override
 			public void onMapClick(final LatLng latLng) {
-				if (mapContainer.getRightMap() != null) {
+				if (mapContainer.getRightMap() != null && mapContainer.getRight().isMapLoaded()) {
 					mapContainer.getRightMap().animateCamera(CameraUpdateFactory.newLatLng(latLng));
 					drawZoomedViewPolygon();
 				}
@@ -239,20 +242,23 @@ public class LeftMapsFragment extends Fragment implements ConnectionCallbacks, O
 	public void onResourcesChanged() {
 		markers.clear();
 		for (Resource resource : ResourceManager.getInstance().getResources()) {
-			ResourceMarker marker = new ResourceMarker(map, resource,getActivity());
+			ResourceMarker marker = new ResourceMarker(map, resource, getActivity());
 			markers.put(resource, marker);
 		}
 	}
 
 	public void setResourceVisibility(final ResourceType resourceType, final boolean isChecked) {
 		markerVisibilities.put(resourceType, Boolean.valueOf(isChecked));
-		for(Map.Entry<Resource, ResourceMarker> entry : markers.entrySet()){
+		for (Map.Entry<Resource, ResourceMarker> entry : markers.entrySet()) {
 			Resource r = entry.getKey();
 			ResourceMarker m = entry.getValue();
-			if(r.getType() == resourceType){
+			if (r.getType() == resourceType) {
 				m.setVisible(isChecked);
 			}
 		}
-		
+	}
+
+	public boolean isMapLoaded() {
+		return isLoaded;
 	}
 }

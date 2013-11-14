@@ -51,6 +51,8 @@ public class RightMapsFragment extends Fragment implements ConnectionCallbacks, 
 	private HashMap<Resource, ResourceMarker> markers;
 	private HashMap<ResourceType, Boolean> markerVisibilities;
 
+	private boolean isLoaded = false;
+
 	private static final LocationRequest REQUEST = LocationRequest.create().setInterval(5000).setFastestInterval(16) // 16ms = 60fps
 			.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
@@ -162,6 +164,7 @@ public class RightMapsFragment extends Fragment implements ConnectionCallbacks, 
 			public void onMapLoaded() {
 				map.animateCamera(CameraUpdateFactory
 						.newCameraPosition(new CameraPosition(HOME, 5.2f, 0, HOME_BEARING)));
+				isLoaded = true;
 			}
 		});
 		map.setOnCameraChangeListener(new OnCameraChangeListener() {
@@ -169,6 +172,7 @@ public class RightMapsFragment extends Fragment implements ConnectionCallbacks, 
 			public void onCameraChange(final CameraPosition posRight) {
 				if (mapContainer.getLeftMap() != null) {
 					mapContainer.getLeftMap().animateCamera(CameraUpdateFactory.zoomTo(posRight.zoom - 1));
+
 				}
 				if (mapContainer.getLeft() != null) {
 					mapContainer.getLeft().drawZoomedViewPolygon();
@@ -203,7 +207,6 @@ public class RightMapsFragment extends Fragment implements ConnectionCallbacks, 
 
 	@Override
 	public void onResourcesChanged() {
-		markers.clear();
 		for (Resource resource : ResourceManager.getInstance().getResources()) {
 			ResourceMarker marker = new ResourceMarker(map, resource, getActivity());
 			markers.put(resource, marker);
@@ -228,5 +231,9 @@ public class RightMapsFragment extends Fragment implements ConnectionCallbacks, 
 				map.animateCamera(CameraUpdateFactory.newLatLng(entry.getValue().getMarker().getPosition()), 250, null);
 			}
 		}
+	}
+
+	public boolean isMapLoaded() {
+		return isLoaded;
 	}
 }
