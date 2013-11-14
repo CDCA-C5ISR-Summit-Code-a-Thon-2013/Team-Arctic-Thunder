@@ -9,6 +9,7 @@ import android.app.Fragment;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -139,6 +140,8 @@ public class LeftMapsFragment extends Fragment implements ConnectionCallbacks, O
 		super.onPause();
 		if (locationClient != null) {
 			locationClient.disconnect();
+			map = null;
+			zoomedViewPolygon = null;
 		}
 	}
 
@@ -167,7 +170,12 @@ public class LeftMapsFragment extends Fragment implements ConnectionCallbacks, O
 		map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
 			@Override
 			public void onMapLoaded() {
-				map.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(HOME, 15f, 0, HOME_BEARING)));
+				if(isLoaded){
+					map.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(HOME, 5f, 0, HOME_BEARING)));
+				}else{
+					map.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(HOME, 15f, 0, HOME_BEARING)));
+				}
+				
 				isLoaded = true;
 			}
 		});
@@ -219,6 +227,7 @@ public class LeftMapsFragment extends Fragment implements ConnectionCallbacks, O
 		int strokeColor = Color.GRAY;
 
 		if (mapContainer.getRightMap() != null) {
+			Log.e("LeftMap", "Right Map is not null");
 			final VisibleRegion rightVR = mapContainer.getRightMap().getProjection().getVisibleRegion();
 			final List<LatLng> rightVRpoints = new ArrayList<LatLng>();
 			rightVRpoints.add(rightVR.farLeft);
@@ -227,9 +236,11 @@ public class LeftMapsFragment extends Fragment implements ConnectionCallbacks, O
 			rightVRpoints.add(rightVR.nearLeft);
 
 			if (zoomedViewPolygon == null) {
+				Log.e("LeftMap", "ZoomedViewPolygon is null");
 				zoomedViewPolygon = map.addPolygon(new PolygonOptions().addAll(rightVRpoints).fillColor(fillColor)
 						.strokeWidth(strokeWidth).strokeColor(strokeColor));
 			} else {
+				Log.e("LeftMap", "ZoomedViewPolygon is not null");
 				zoomedViewPolygon.setFillColor(fillColor);
 				zoomedViewPolygon.setStrokeWidth(strokeWidth);
 				zoomedViewPolygon.setPoints(rightVRpoints);
