@@ -194,24 +194,24 @@ public class ATLogistics extends Activity implements ObjectLoadedListener {
 	}
 
 	private void addDummyData() {
-		ResourceManager.getInstance().addResource(new Resource(
-				"Ownship", ResourceType.SHIP, 11.05, 124.367, "Fuel: 24000 gallons", 38f));
-		ResourceManager.getInstance().addResource(new Resource(
-				"Palawan", ResourceType.FOODWATER, 9.9798, 118.34, "88 pallets", 11f));
-		ResourceManager.getInstance().addResource(new Resource(
-				"Davao", ResourceType.AMMO, 7.3775, 125.4765, "10 tons", 60f));
-		ResourceManager.getInstance().addResource(new Resource(
-				"Manila", ResourceType.CLOTHING, 14.7279, 120.8368, "6 tons", 63f));
-		ResourceManager.getInstance().addResource(new Resource(
-				"Manado", ResourceType.MEDICAL, 1.5525, 124.8265, "23 pallets", 6f));
-		ResourceManager.getInstance().addResource(new Resource(
-				"Sabah", ResourceType.FUEL, 1.5525, 124.8265, "150000 gallons", 23f));
-		ResourceManager.getInstance().addResource(new Resource(
-				"Helo", ResourceType.HELO, 10.2017, 128.3524, "Fuel: 14000 gallons", 64f));
-		ResourceManager.getInstance().addResource(new Resource(
-				"Helo Landing", ResourceType.HELOLANDING, 13.6041, 123.0000, "Fuel: 249000 gallons", 83f));
-		ResourceManager.getInstance().addResource(new Resource(
-				"Ground", ResourceType.GROUND, 8.1962, 123.0271, "Fuel: 32000 gallons", 54f));
+		ResourceManager.getInstance().addResource(
+				new Resource("Ownship", ResourceType.SHIP, 11.05, 124.367, "Fuel: 24000 gallons", 38f));
+		ResourceManager.getInstance().addResource(
+				new Resource("Palawan", ResourceType.FOODWATER, 9.9798, 118.34, "88 pallets", 11f));
+		ResourceManager.getInstance().addResource(
+				new Resource("Davao", ResourceType.AMMO, 7.3775, 125.4765, "10 tons", 60f));
+		ResourceManager.getInstance().addResource(
+				new Resource("Manila", ResourceType.CLOTHING, 14.7279, 120.8368, "6 tons", 63f));
+		ResourceManager.getInstance().addResource(
+				new Resource("Manado", ResourceType.MEDICAL, 1.5525, 124.8265, "23 pallets", 6f));
+		ResourceManager.getInstance().addResource(
+				new Resource("Sabah", ResourceType.FUEL, 1.5525, 124.8265, "150000 gallons", 23f));
+		ResourceManager.getInstance().addResource(
+				new Resource("Helo", ResourceType.HELO, 10.2017, 128.3524, "Fuel: 14000 gallons", 64f));
+		ResourceManager.getInstance().addResource(
+				new Resource("Helo Landing", ResourceType.HELOLANDING, 13.6041, 123.0000, "Fuel: 249000 gallons", 83f));
+		ResourceManager.getInstance().addResource(
+				new Resource("Ground", ResourceType.GROUND, 8.1962, 123.0271, "Fuel: 32000 gallons", 54f));
 
 		ResourceManager.getInstance().notifyResourcesChanged();
 	}
@@ -347,7 +347,7 @@ public class ATLogistics extends Activity implements ObjectLoadedListener {
 		}
 
 		FragmentManager fragmentManager = getFragmentManager();
-		fragmentManager.beginTransaction().replace(R.id.left_content, modelViewerFragment).addToBackStack("Friday").commit();
+		fragmentManager.beginTransaction().replace(R.id.left_content, modelViewerFragment).commit();
 		lastLoadedModel = model;
 	}
 
