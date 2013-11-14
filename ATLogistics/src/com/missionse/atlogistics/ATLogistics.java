@@ -343,7 +343,7 @@ public class ATLogistics extends Activity implements ObjectLoadedListener {
 		}
 
 		FragmentManager fragmentManager = getFragmentManager();
-		fragmentManager.beginTransaction().replace(R.id.left_content, modelViewerFragment).commit();
+		fragmentManager.beginTransaction().replace(R.id.left_content, modelViewerFragment).addToBackStack("Friday").commit();
 		lastLoadedModel = model;
 	}
 

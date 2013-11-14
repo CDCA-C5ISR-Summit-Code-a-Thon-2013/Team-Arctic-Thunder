@@ -139,18 +139,18 @@ public class LeftMapsFragment extends Fragment implements ConnectionCallbacks, O
 		super.onPause();
 		if (locationClient != null) {
 			locationClient.disconnect();
-			map = null;
-			zoomedViewPolygon = null;
+			//map = null;
+			//zoomedViewPolygon = null;
 		}
 	}
 
 	private void setUpMapIfNeeded() {
-		if (map == null) {
+		//if (map == null) {
 			map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map_left)).getMap();
 			if (map != null) {
 				setUpMap();
 			}
-		}
+		//}
 	}
 
 	private void setUpLocationClientIfNeeded() {
