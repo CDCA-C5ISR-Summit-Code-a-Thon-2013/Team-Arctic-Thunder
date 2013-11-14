@@ -2,18 +2,26 @@ package com.missionse.atlogistics.resources;
 
 public class Resource {
 
+	private static int uniqueID = 0;
+
 	private ResourceType type;
 	private String resourceName = "";
 	private String flavorText = "";
 	private double lat = 0;
 	private double lon = 0;
+	private final int id = ++uniqueID;
 
-	public Resource(final String name, final ResourceType resourceType, final double latitude, final double longitude, final String text) {
+	public Resource(final String name, final ResourceType resourceType, final double latitude, final double longitude,
+			final String text) {
 		resourceName = name;
 		type = resourceType;
 		lat = latitude;
 		lon = longitude;
 		flavorText = text;
+	}
+
+	public int getId() {
+		return id;
 	}
 
 	public ResourceType getType() {

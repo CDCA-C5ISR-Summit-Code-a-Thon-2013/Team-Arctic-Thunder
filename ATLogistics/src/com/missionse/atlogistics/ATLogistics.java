@@ -15,6 +15,7 @@ import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -74,11 +75,19 @@ public class ATLogistics extends Activity implements ObjectLoadedListener {
 					byte[] writeBuf = (byte[]) msg.obj;
 					// construct a string from the buffer
 					String writeMessage = new String(writeBuf);
+					Log.e("sometehing", "writeMessage: " + writeMessage);
 					break;
 				case BluetoothService.MESSAGE_READ:
 					byte[] readBuf = (byte[]) msg.obj;
 					// construct a string from the valid bytes in the buffer
 					String readMessage = new String(readBuf, 0, msg.arg1);
+					Log.e("sometehing", "readMessage: " + readMessage);
+					int sendId = Integer.valueOf(readMessage).intValue();
+					if (rightMapsFragment != null) {
+						rightMapsFragment.showMarker(sendId);
+					}
+					Toast.makeText(ATLogistics.this, "Supply station requested Resource ID " + sendId,
+							Toast.LENGTH_LONG).show();
 					break;
 				case BluetoothService.MESSAGE_DEVICE_NAME:
 					// save the connected device's name
@@ -185,16 +194,16 @@ public class ATLogistics extends Activity implements ObjectLoadedListener {
 	}
 
 	private void addDummyData() {
-		ResourceManager.getInstance().addResource(new Resource(
-				"Ownship", ResourceType.SHIP, 11.05, 124.367, "USS George Washington"));
-		ResourceManager.getInstance().addResource(new Resource(
-				"Palawan", ResourceType.FOODWATER, 9.9798, 118.34, "10 tons"));
-		ResourceManager.getInstance().addResource(new Resource(
-				"Davao", ResourceType.AMMO, 7.3775, 125.4765, "740 rounds"));
-		ResourceManager.getInstance().addResource(new Resource(
-				"Manila", ResourceType.CLOTHING, 14.7279, 120.8368, "6 tons"));
-		ResourceManager.getInstance().addResource(new Resource(
-				"Manado", ResourceType.MEDICAL, 1.5525, 124.8265, "23 crates"));
+		ResourceManager.getInstance().addResource(
+				new Resource("Ownship", ResourceType.SHIP, 11.05, 124.367, "USS George Washington"));
+		ResourceManager.getInstance().addResource(
+				new Resource("Palawan", ResourceType.FOODWATER, 9.9798, 118.34, "10 tons"));
+		ResourceManager.getInstance().addResource(
+				new Resource("Davao", ResourceType.AMMO, 7.3775, 125.4765, "740 rounds"));
+		ResourceManager.getInstance().addResource(
+				new Resource("Manila", ResourceType.CLOTHING, 14.7279, 120.8368, "6 tons"));
+		ResourceManager.getInstance().addResource(
+				new Resource("Manado", ResourceType.MEDICAL, 1.5525, 124.8265, "23 crates"));
 
 		ResourceManager.getInstance().notifyResourcesChanged();
 	}
@@ -253,16 +262,19 @@ public class ATLogistics extends Activity implements ObjectLoadedListener {
 	public boolean onOptionsItemSelected(final MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.secure_connect_scan:
-				showDeviceList(true);
+				showDiscoveryDialog(true);
 				return true;
 			case R.id.discoverable:
 				enableDiscovery();
+				return true;
+			case R.id.disconnect:
+				bluetoothService.disconnect();
 				return true;
 		}
 		return true;
 	}
 
-	private void showDeviceList(final boolean secure) {
+	private void showDiscoveryDialog(final boolean secure) {
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
 		Fragment previousFragment = getFragmentManager().findFragmentByTag("dialog");
 		if (previousFragment != null) {
@@ -271,8 +283,8 @@ public class ATLogistics extends Activity implements ObjectLoadedListener {
 		transaction.addToBackStack(null).commit();
 
 		// Launch the DeviceListActivity to see devices and do scan
-		DiscoveryFragment deviceListFragment = DiscoveryFragment.newInstance(secure);
-		deviceListFragment.show(getFragmentManager(), "dialog");
+		DiscoveryFragment discoveryFragment = DiscoveryFragment.newInstance(secure);
+		discoveryFragment.show(getFragmentManager(), "dialog");
 	}
 
 	private void enableDiscovery() {
@@ -373,5 +385,18 @@ public class ATLogistics extends Activity implements ObjectLoadedListener {
 			return false;
 		};
 		return true;
+	}
+
+	public void onResourceClicked(final Resource key) {
+		if (key.getType().equals(ResourceType.AMMO)) {
+			showLeftMap();
+			getFragmentManager().executePendingTransactions();
+			showModel(R.raw.wooden_crate_ammo_obj);
+		}
+
+		if (bluetoothService.getState() == BluetoothService.STATE_CONNECTED) {
+			String message = String.valueOf(key.getId());
+			sendMessage(message);
+		}
 	}
 }

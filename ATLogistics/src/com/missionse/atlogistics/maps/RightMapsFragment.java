@@ -2,6 +2,7 @@ package com.missionse.atlogistics.maps;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import android.app.Fragment;
 import android.location.Location;
@@ -179,9 +180,12 @@ public class RightMapsFragment extends Fragment implements ConnectionCallbacks, 
 		map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
 			@Override
 			public void onInfoWindowClick(final Marker marker) {
-				((ATLogistics) getActivity()).showLeftMap();
-				((ATLogistics) getActivity()).getFragmentManager().executePendingTransactions();
-				((ATLogistics) getActivity()).showModel(R.raw.wooden_crate_ammo_obj);
+				for (Entry<Resource, ResourceMarker> entry : markers.entrySet()) {
+					if (entry.getValue().getMarker().equals(marker)) {
+						((ATLogistics) getActivity()).onResourceClicked(entry.getKey());
+					}
+
+				}
 			}
 		});
 
@@ -201,20 +205,29 @@ public class RightMapsFragment extends Fragment implements ConnectionCallbacks, 
 	public void onResourcesChanged() {
 		markers.clear();
 		for (Resource resource : ResourceManager.getInstance().getResources()) {
-			ResourceMarker marker = new ResourceMarker(map, resource,getActivity());
+			ResourceMarker marker = new ResourceMarker(map, resource, getActivity());
 			markers.put(resource, marker);
 		}
 	}
 
 	public void setResourceVisibility(final ResourceType resourceType, final boolean isChecked) {
 		markerVisibilities.put(resourceType, Boolean.valueOf(isChecked));
-		for(Map.Entry<Resource, ResourceMarker> entry : markers.entrySet()){
+		for (Map.Entry<Resource, ResourceMarker> entry : markers.entrySet()) {
 			Resource r = entry.getKey();
 			ResourceMarker m = entry.getValue();
-			if(r.getType() == resourceType){
+			if (r.getType() == resourceType) {
 				m.setVisible(isChecked);
 			}
 		}
-		
+
+	}
+
+	public void showMarker(final int sendId) {
+		for (Entry<Resource, ResourceMarker> entry : markers.entrySet()) {
+			if (entry.getKey().getId() == sendId) {
+				entry.getValue().getMarker().showInfoWindow();
+				map.animateCamera(CameraUpdateFactory.newLatLng(entry.getValue().getMarker().getPosition()), 250, null);
+			}
+		}
 	}
 }

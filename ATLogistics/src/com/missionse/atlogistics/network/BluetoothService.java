@@ -110,6 +110,10 @@ public class BluetoothService {
 		setState(STATE_CONNECTING);
 	}
 
+	public synchronized void disconnect() {
+		restart();
+	}
+
 	public synchronized void stop() {
 		cancelConnectionThreads();
 
