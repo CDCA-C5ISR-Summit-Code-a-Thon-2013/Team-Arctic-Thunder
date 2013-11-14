@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import android.app.Fragment;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,6 +30,8 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.missionse.atlogistics.ATLogistics;
 import com.missionse.atlogistics.R;
 import com.missionse.atlogistics.resources.Resource;
@@ -52,6 +55,9 @@ public class RightMapsFragment extends Fragment implements ConnectionCallbacks, 
 	private HashMap<ResourceType, Boolean> markerVisibilities;
 
 	private boolean isLoaded = false;
+
+	private Polyline waypoint1, waypoint2;
+	private boolean waypointsVisible = false;
 
 	private static final LocationRequest REQUEST = LocationRequest.create().setInterval(5000).setFastestInterval(16) // 16ms = 60fps
 			.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -188,12 +194,34 @@ public class RightMapsFragment extends Fragment implements ConnectionCallbacks, 
 					if (entry.getValue().getMarker().equals(marker)) {
 						((ATLogistics) getActivity()).onResourceClicked(entry.getKey());
 					}
-
+				}
+				for (Entry<Resource, ResourceMarker> entry : markers.entrySet()) {
+					if (entry.getValue().getMarker().equals(marker)) {
+						if (entry.getKey().getType().equals(ResourceType.HELO)) {
+							setWaypointVisibility(!waypointsVisible);
+						}
+					}
 				}
 			}
 		});
 
+		waypoint1 = map.addPolyline(new PolylineOptions().add(new LatLng(10.2017, 128.3524), new LatLng(13.6041, 123.0000))
+				.width(10)
+				.color(Color.BLUE));
+		waypoint2 = map.addPolyline(new PolylineOptions().add(new LatLng(13.6041, 123.0000), new LatLng(11.05, 124.367))
+				.width(10)
+				.color(Color.BLUE));
+		setWaypointVisibility(false);
+
 		ResourceManager.getInstance().addListener(this);
+	}
+
+	public void setWaypointVisibility(final boolean visible) {
+		if (waypoint1 != null && waypoint2 != null) {
+			waypoint1.setVisible(visible);
+			waypoint2.setVisible(visible);
+			waypointsVisible = visible;
+		}
 	}
 
 	@Override

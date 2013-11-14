@@ -407,4 +407,12 @@ public class ATLogistics extends Activity implements ObjectLoadedListener {
 			sendMessage(message);
 		}
 	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+
+		getFragmentManager().beginTransaction().remove(leftMapsFragment).commit();
+		getFragmentManager().beginTransaction().remove(rightMapsFragment).commit();
+	}
 }

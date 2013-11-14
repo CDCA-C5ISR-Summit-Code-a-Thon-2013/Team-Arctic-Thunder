@@ -17,6 +17,7 @@ import com.missionse.atlogistics.resources.Resource;
 public class ResourceMarker {
 
 	private GoogleMap googleMap;
+
 	private static Context context = null;
 
 	private Marker marker;
@@ -27,9 +28,6 @@ public class ResourceMarker {
 		if (context != null) {
 			this.context = context;
 		}
-		//marker = googleMap.addMarker(new MarkerOptions()
-		//		.icon(BitmapDescriptorFactory.fromResource(resource.getType().getResourceId()))
-		//		.title(resource.getType().toString()).position(new LatLng(resource.getLat(), resource.getLon())));
 		marker = googleMap.addMarker(new MarkerOptions()
 				.icon(BitmapDescriptorFactory.fromBitmap(resizeBitmap(resource.getType().getResourceId())))
 				.title(resource.getType().toString()).position(new LatLng(resource.getLat(), resource.getLon())));
@@ -40,7 +38,6 @@ public class ResourceMarker {
 	private Bitmap resizeBitmap(final int resourceID) {
 		Bitmap b = BitmapFactory.decodeResource(context.getResources(), resourceID);
 		Bitmap bhalfsize = Bitmap.createScaledBitmap(b, b.getWidth() / 2, b.getHeight() / 2, false);
-
 		return bhalfsize;
 	}
 
