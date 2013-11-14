@@ -40,6 +40,7 @@ public class FilterMenuFragment extends Fragment {
 
 	private void createMenu() {
 		List<ResourceType> resourceTypes = new ArrayList<ResourceType>(Arrays.asList(ResourceType.values()));
+		resourceTypes.remove(ResourceType.WAYPOINTS);
 		listView.setAdapter(new FilterAdapter(getActivity(), R.layout.filter_menu_entry, resourceTypes));
 	}
 
