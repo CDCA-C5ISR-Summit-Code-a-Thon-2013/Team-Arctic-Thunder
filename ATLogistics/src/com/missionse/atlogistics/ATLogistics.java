@@ -340,6 +340,10 @@ public class ATLogistics extends Activity implements ObjectLoadedListener {
 				break;
 			case R.raw.wooden_crate_ammo_obj:
 				modelViewerFragment.setModelText(R.string.ammunition_text);
+				break;
+			case R.raw.cargoship_obj:
+				modelViewerFragment.setModelText(R.string.cargoship_text);
+				break;
 		}
 
 		FragmentManager fragmentManager = getFragmentManager();
@@ -356,6 +360,10 @@ public class ATLogistics extends Activity implements ObjectLoadedListener {
 				break;
 			case R.raw.wooden_crate_ammo_obj:
 				modelViewerFragment.getAnimator().rotateTo(0f, 45f, 0f, 2000);
+				break;
+			case R.raw.cargoship_obj:
+				modelViewerFragment.getAnimator().scaleTo(4.0f, 2000);
+				modelViewerFragment.getAnimator().rotateTo(0f, 215f, 0f, 2000);
 				break;
 		}
 	}
@@ -400,6 +408,10 @@ public class ATLogistics extends Activity implements ObjectLoadedListener {
 			showLeftMap();
 			getFragmentManager().executePendingTransactions();
 			showModel(R.raw.wooden_crate_ammo_obj);
+		} else if (key.getType().equals(ResourceType.SHIP)) {
+			showLeftMap();
+			getFragmentManager().executePendingTransactions();
+			showModel(R.raw.cargoship_obj);
 		}
 
 		if (bluetoothService.getState() == BluetoothService.STATE_CONNECTED) {
