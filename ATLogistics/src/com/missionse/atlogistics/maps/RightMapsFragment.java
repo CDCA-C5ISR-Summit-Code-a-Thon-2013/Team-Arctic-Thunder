@@ -168,7 +168,7 @@ public class RightMapsFragment extends Fragment implements ConnectionCallbacks, 
 			@Override
 			public void onCameraChange(final CameraPosition posRight) {
 				if (mapContainer.getLeftMap() != null) {
-					mapContainer.getLeftMap().animateCamera(CameraUpdateFactory.zoomTo(posRight.zoom - 3));
+					mapContainer.getLeftMap().animateCamera(CameraUpdateFactory.zoomTo(posRight.zoom - 1));
 				}
 				if (mapContainer.getLeft() != null) {
 					mapContainer.getLeft().drawZoomedViewPolygon();
@@ -219,7 +219,6 @@ public class RightMapsFragment extends Fragment implements ConnectionCallbacks, 
 				m.setVisible(isChecked);
 			}
 		}
-
 	}
 
 	public void showMarker(final int sendId) {

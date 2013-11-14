@@ -10,7 +10,9 @@ public enum ResourceType {
 	FUEL(R.drawable.fuel, "Fuel"),
 	MEDICAL(R.drawable.medical,"Medical"),
 	HELO(R.drawable.helos, "Helo"),
+	HELOLANDING(R.drawable.helo_landing, "Helo Landing"),
 	SHIP(R.drawable.ussgeorgewashington, "Ship"),
+	GROUND(R.drawable.ground_track, "Ground"),
 	WAYPOINTS(R.drawable.ic_launcher, "Waypoint");
 
 	private int resource;

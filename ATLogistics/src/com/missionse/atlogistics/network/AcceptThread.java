@@ -41,7 +41,7 @@ public class AcceptThread extends Thread {
 				// This is a blocking call and will only return on a
 				// successful connection or an exception
 				socket = serverSocket.accept();
-			} catch (IOException e) {
+			} catch (Exception e) {
 				break;
 			}
 		}
@@ -56,7 +56,7 @@ public class AcceptThread extends Thread {
 	public void cancel() {
 		try {
 			serverSocket.close();
-		} catch (IOException e) {
+		} catch (Exception e) {
 		}
 	}
 }

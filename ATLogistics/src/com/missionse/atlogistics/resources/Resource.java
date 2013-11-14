@@ -9,15 +9,17 @@ public class Resource {
 	private String flavorText = "";
 	private double lat = 0;
 	private double lon = 0;
+	private float percent = 0;
+
 	private final int id = ++uniqueID;
 
-	public Resource(final String name, final ResourceType resourceType, final double latitude, final double longitude,
-			final String text) {
+	public Resource(final String name, final ResourceType resourceType, final double latitude, final double longitude, final String text, final float capacity) {
 		resourceName = name;
 		type = resourceType;
 		lat = latitude;
 		lon = longitude;
 		flavorText = text;
+		percent = capacity;
 	}
 
 	public int getId() {
@@ -62,5 +64,9 @@ public class Resource {
 
 	public void setLon(final double lon) {
 		this.lon = lon;
+	}
+
+	public float getPercent() {
+		return percent;
 	}
 }

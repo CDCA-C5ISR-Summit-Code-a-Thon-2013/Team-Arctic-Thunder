@@ -53,26 +53,25 @@ public class CustomInfoWindowAdapter implements InfoWindowAdapter {
 
 		//((ImageView) view.findViewById(R.id.badge)).setImageResource(badge);
 
-		String title = marker.getTitle();
-		TextView titleUi = ((TextView) view.findViewById(R.id.title));
-		if (title != null) {
-			// Spannable string allows us to edit the formatting of the text.
-			SpannableString titleText = new SpannableString(title);
-			titleText.setSpan(new ForegroundColorSpan(Color.RED), 0, titleText.length(), 0);
-			titleUi.setText(titleText);
-		} else {
-			titleUi.setText("");
-		}
-
 		TextView amountUi = ((TextView) view.findViewById(R.id.amount));
 		for (Resource resource : ResourceManager.getInstance().getResources()) {
 			if (resourceMarkers.get(resource).getMarker().equals(marker)) {
-				SpannableString flavorText = new SpannableString(resource.getFlavorText());
-				flavorText.setSpan(new ForegroundColorSpan(Color.BLACK), 0, flavorText.length(), 0);
+				SpannableString titleText = new SpannableString(resource.getType().getDescription());
+				titleText.setSpan(new ForegroundColorSpan(Color.BLUE), 0, titleText.length(), 0);
+
+				TextView titleUi = ((TextView) view.findViewById(R.id.title));
+				titleUi.setText(titleText);
+
+				String text = resource.getFlavorText() + " (" + resource.getPercent() + "%)";
+				int color = Color.BLACK;
+				if (resource.getPercent() < 25.0f) {
+					color = Color.RED;
+				}
+
+				SpannableString flavorText = new SpannableString(text);
+				flavorText.setSpan(new ForegroundColorSpan(color), 0, flavorText.length(), 0);
 				amountUi.setText(flavorText);
 				break;
-			}else{
-				amountUi.setText("100%");
 			}
 		}
 
